@@ -1,10 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
+
+import 'app/app.dart';
 
 typedef ModelViewerBuilder = Widget Function();
 
 void main() {
-  runApp(const HumanTwinPocApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky));
+  runApp(ProviderScope(child: HumanTwinApp()));
 }
 
 class HumanTwinPocApp extends StatelessWidget {
