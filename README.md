@@ -41,12 +41,15 @@ AI 数字人体移动端体验 Demo。
 - `flutter test`: 4/4 passed
 - Day 1 Viewer regression tests still passing
 - Debug APK built
+- Dedicated `06 App UI｜正式界面` workspace created for final High-Fidelity screens
+- Six product screens organized as independent 390×844 frames with reusable component instances and variants
 - Day 2 Figma / GitHub / Notion / acceptance video archived
 
 ## Demo Evidence
 
-- [Figma · 06 App UI｜正式界面](https://www.figma.com/design/JN4IsUqG7tLuwqcGbjbd1k/HumanTwin-AI-Demo?node-id=151-3)
-- [Figma formal workspace screenshot](docs/evidence/day-2/app-ui-formal-workspace.png)
+- [Figma · 06 App UI｜正式界面](https://www.figma.com/design/JN4IsUqG7tLuwqcGbjbd1k/HumanTwin-AI-Demo?node-id=151-2)
+- [Figma final App UI workspace structure](docs/evidence/day-2/figma-app-ui-workspace.png)
+- [Figma reusable components structure](docs/evidence/day-2/figma-components-structure.png)
 - [Approved Home area screenshot](docs/evidence/day-2/app-ui-home-approved.png)
 - [Flutter Home screenshot](docs/evidence/day-2/home-android-390x844.png)
 - [Day 2 delivery demo](artifacts/day-2/02-home-delivery-demo.mp4)
