@@ -18,6 +18,11 @@ GoRouter createAppRouter() {
         builder: (BuildContext context, GoRouterState state) =>
             const PhotoGuideScreen(),
       ),
+      GoRoute(
+        path: '/photos',
+        builder: (BuildContext context, GoRouterState state) =>
+            const PhotoSelectionPlaceholderScreen(),
+      ),
     ],
   );
 }

@@ -22,5 +22,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/digital_human_hero.png
+    - assets/images/
     - assets/models/human_demo.glb

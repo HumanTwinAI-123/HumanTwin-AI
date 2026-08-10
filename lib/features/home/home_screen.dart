@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app/theme/app_theme.dart';
+import '../../shared/widgets/primary_button.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -113,7 +114,10 @@ class _HomeCanvas extends StatelessWidget {
         Positioned(
           left: 20,
           top: 704,
-          child: _PrimaryButton(onPressed: () => context.push('/photo-guide')),
+          child: PrimaryButton(
+            label: '开始创建',
+            onPressed: () => context.push('/photo-guide'),
+          ),
         ),
         const Positioned(
           left: 20,
@@ -279,54 +283,6 @@ class _DigitalHumanHero extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PrimaryButton extends StatelessWidget {
-  const _PrimaryButton({required this.onPressed});
-
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(AppRadii.medium)),
-        boxShadow: <BoxShadow>[
-          BoxShadow(color: Color(0x2986D7FF), blurRadius: 18),
-        ],
-      ),
-      child: SizedBox(
-        width: 350,
-        height: 56,
-        child: FilledButton(
-          onPressed: onPressed,
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.resolveWith<Color>(
-              (Set<WidgetState> states) => states.contains(WidgetState.pressed)
-                  ? AppColors.accentPressed
-                  : AppColors.accentPrimary,
-            ),
-            foregroundColor: const WidgetStatePropertyAll<Color>(
-              AppColors.background,
-            ),
-            shape: WidgetStatePropertyAll<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppRadii.medium),
-              ),
-            ),
-          ),
-          child: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(width: 20),
-              Expanded(child: Text('开始创建', textAlign: TextAlign.center)),
-              Icon(Icons.arrow_forward_rounded, size: 20),
-            ],
-          ),
-        ),
       ),
     );
   }
