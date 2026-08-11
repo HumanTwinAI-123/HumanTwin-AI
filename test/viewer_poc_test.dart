@@ -64,7 +64,7 @@ void main() {
     );
   });
 
-  testWidgets('Photo Guide primary action opens the Day 4 placeholder', (
+  testWidgets('Photo Guide primary action opens Photo Selection', (
     WidgetTester tester,
   ) async {
     tester.view.physicalSize = const Size(390, 844);
@@ -81,10 +81,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.byKey(const ValueKey<String>('photo-selection-placeholder')),
+      find.byKey(const ValueKey<String>('photo-selection-scroll')),
       findsOneWidget,
     );
-    expect(find.text('DAY 4 · PLACEHOLDER'), findsOneWidget);
+    expect(find.text('照片选择'), findsOneWidget);
+    expect(find.text('选择三视图照片'), findsOneWidget);
+    expect(find.text('正面照片'), findsOneWidget);
+    expect(find.text('侧面照片'), findsOneWidget);
+    expect(find.text('背面照片'), findsOneWidget);
   });
 
   testWidgets('Photo Guide stays usable at 360dp and 200% text', (
@@ -132,7 +136,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.byKey(const ValueKey<String>('photo-selection-placeholder')),
+      find.byKey(const ValueKey<String>('photo-selection-scroll')),
       findsOneWidget,
     );
     expect(tester.takeException(), isNull);
