@@ -38,11 +38,16 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('拍摄说明'), findsOneWidget);
+    expect(find.text('02 / 06'), findsOneWidget);
+    expect(find.text('STEP 02 / 06'), findsNothing);
+    expect(find.text('PHOTO GUIDE / CAPTURE STANDARD'), findsNothing);
     expect(find.text('按标准完成三视图拍摄'), findsOneWidget);
     expect(find.text('正面\nFRONT'), findsOneWidget);
     expect(find.text('侧面\nSIDE'), findsOneWidget);
     expect(find.text('背面\nBACK'), findsOneWidget);
     expect(find.text('拍摄要求'), findsOneWidget);
+    expect(find.text('04 POINTS'), findsNothing);
+    expect(find.text('CAPTURE CHECKLIST'), findsNothing);
     expect(find.text('• 光线均匀，避免强逆光和明显阴影'), findsOneWidget);
     expect(find.text('• 全身完整入镜，头部与双脚不要裁切'), findsOneWidget);
     expect(find.text('• 身体自然站立，手臂与躯干轻微分开'), findsOneWidget);

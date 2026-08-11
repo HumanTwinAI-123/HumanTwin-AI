@@ -45,14 +45,16 @@ class PhotoGuideScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
                               const _GuideHeader(),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
                                   horizontal: AppSpacing.page,
                                 ),
                                 child: Divider(
                                   height: 29,
                                   thickness: 1,
-                                  color: AppColors.borderSubtle,
+                                  color: AppColors.borderSubtle.withValues(
+                                    alpha: 0.68,
+                                  ),
                                 ),
                               ),
                               const Padding(
@@ -61,7 +63,7 @@ class PhotoGuideScreen extends StatelessWidget {
                                 ),
                                 child: _GuideIntro(),
                               ),
-                              const SizedBox(height: AppSpacing.lg),
+                              const SizedBox(height: AppSpacing.xxl),
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: AppSpacing.page,
@@ -77,10 +79,22 @@ class PhotoGuideScreen extends StatelessWidget {
                                   requirements: _requirements,
                                 ),
                               ),
-                              const SizedBox(height: AppSpacing.md),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                child: _StepIndicator(),
+                              const SizedBox(height: AppSpacing.xl),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                ),
+                                child: Align(
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 320,
+                                    ),
+                                    child: const SizedBox(
+                                      width: double.infinity,
+                                      child: _StepIndicator(),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -139,7 +153,18 @@ class _GuideHeader extends StatelessWidget {
             Text('拍摄说明', style: Theme.of(context).textTheme.titleLarge),
             if (MediaQuery.textScalerOf(context).scale(1) < 1.3) ...<Widget>[
               const Spacer(),
-              const _MicroLabel('STEP 02 / 06'),
+              Text(
+                '02 / 06',
+                textScaler: TextScaler.noScaling,
+                style: TextStyle(
+                  color: AppColors.textTertiary.withValues(alpha: 0.82),
+                  fontFamily: 'monospace',
+                  fontSize: 9,
+                  height: 12 / 9,
+                  letterSpacing: 0.25,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
             ],
           ],
         ),
@@ -156,11 +181,6 @@ class _GuideIntro extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const _MicroLabel(
-          'PHOTO GUIDE / CAPTURE STANDARD',
-          color: AppColors.accentPrimary,
-        ),
-        const SizedBox(height: 7),
         Text('按标准完成三视图拍摄', style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 3),
         Text(
@@ -183,44 +203,28 @@ class _ThreeViewReferenceCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
         color: AppColors.surface1,
-        border: Border.all(color: AppColors.borderSubtle),
+        border: Border.all(
+          color: AppColors.borderSubtle.withValues(alpha: 0.62),
+        ),
         borderRadius: BorderRadius.circular(AppRadii.large),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          const Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            spacing: AppSpacing.md,
-            runSpacing: AppSpacing.xs,
-            children: <Widget>[
-              _MicroLabel(
-                'THREE-VIEW REFERENCE',
-                color: AppColors.accentPrimary,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            for (int index = 0; index < views.length; index++) ...<Widget>[
+              Expanded(
+                child: _ViewTile(
+                  label: views[index].$1,
+                  code: views[index].$2,
+                  assetPath: views[index].$3,
+                ),
               ),
-              _MicroLabel('FRONT · SIDE · BACK'),
+              if (index < views.length - 1)
+                const SizedBox(width: AppSpacing.md),
             ],
-          ),
-          const SizedBox(height: AppSpacing.md),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                for (int index = 0; index < views.length; index++) ...<Widget>[
-                  Expanded(
-                    child: _ViewTile(
-                      label: views[index].$1,
-                      code: views[index].$2,
-                      assetPath: views[index].$3,
-                    ),
-                  ),
-                  if (index < views.length - 1)
-                    const SizedBox(width: AppSpacing.md),
-                ],
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -240,17 +244,20 @@ class _ViewTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      constraints: const BoxConstraints(minHeight: 182),
       padding: const EdgeInsets.fromLTRB(6, 10, 6, 8),
       decoration: BoxDecoration(
         color: AppColors.surface2,
-        border: Border.all(color: AppColors.borderSubtle),
+        border: Border.all(
+          color: AppColors.borderSubtle.withValues(alpha: 0.52),
+        ),
         borderRadius: BorderRadius.circular(AppRadii.small),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SizedBox(
-            height: 92,
+            height: 109,
             child: Image.asset(
               assetPath,
               key: ValueKey<String>('photo-guide-${code.toLowerCase()}'),
@@ -259,13 +266,30 @@ class _ViewTile extends StatelessWidget {
               semanticLabel: '$label人体拍摄示意',
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            '$label\n$code',
+          const SizedBox(height: 11),
+          Text.rich(
+            TextSpan(
+              children: <InlineSpan>[
+                TextSpan(
+                  text: '$label\n',
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                TextSpan(
+                  text: code,
+                  style: const TextStyle(
+                    color: AppColors.textTertiary,
+                    fontFamily: 'monospace',
+                    fontSize: 9,
+                    height: 14 / 9,
+                    letterSpacing: 0.2,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ],
+            ),
             textAlign: TextAlign.center,
-            style: Theme.of(
-              context,
-            ).textTheme.labelMedium?.copyWith(color: AppColors.textPrimary),
           ),
         ],
       ),
@@ -283,33 +307,41 @@ class _RequirementsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text('拍摄要求', style: Theme.of(context).textTheme.titleMedium),
-            const Spacer(),
-            const _MicroLabel('04 POINTS'),
-          ],
-        ),
+        Text('拍摄要求', style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: AppSpacing.sm),
         Container(
-          padding: const EdgeInsets.all(AppSpacing.lg),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.lg,
+            vertical: 18,
+          ),
           decoration: BoxDecoration(
-            color: AppColors.surface1,
-            border: Border.all(color: AppColors.borderSubtle),
+            color: AppColors.surface1.withValues(alpha: 0.74),
+            border: Border.all(
+              color: AppColors.borderSubtle.withValues(alpha: 0.36),
+            ),
             borderRadius: BorderRadius.circular(AppRadii.medium),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const _MicroLabel(
-                'CAPTURE CHECKLIST',
-                color: AppColors.accentPrimary,
-              ),
-              const SizedBox(height: AppSpacing.sm),
               for (final String requirement in requirements)
-                Text(
-                  '• $requirement',
-                  style: Theme.of(context).textTheme.bodyLarge,
+                Text.rich(
+                  TextSpan(
+                    children: <InlineSpan>[
+                      TextSpan(
+                        text: '•',
+                        style: TextStyle(
+                          color: AppColors.accentPrimary.withValues(
+                            alpha: 0.68,
+                          ),
+                        ),
+                      ),
+                      TextSpan(text: ' $requirement'),
+                    ],
+                  ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(height: 24 / 15),
                 ),
             ],
           ),
@@ -334,7 +366,7 @@ class _StepIndicator extends StatelessWidget {
     return Semantics(
       label: '当前步骤：拍摄说明，第 2 步',
       child: SizedBox(
-        height: 136,
+        height: 128,
         child: Stack(
           children: <Widget>[
             const Positioned.fill(
@@ -380,29 +412,43 @@ class _StepItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color labelColor = isCurrent
         ? AppColors.accentPrimary
-        : AppColors.textSecondary;
+        : AppColors.textSecondary.withValues(alpha: isReached ? 0.52 : 0.44);
+    final Color circleColor = isCurrent
+        ? AppColors.accentPrimary
+        : isReached
+        ? AppColors.accentPrimary.withValues(alpha: 0.52)
+        : Colors.transparent;
+    final Color numberColor = isCurrent
+        ? AppColors.background
+        : isReached
+        ? AppColors.background.withValues(alpha: 0.68)
+        : AppColors.textSecondary.withValues(alpha: 0.44);
+    final Color stateColor = AppColors.textSecondary.withValues(
+      alpha: isCurrent ? 0.56 : (isReached ? 0.34 : 0.26),
+    );
 
     return Padding(
-      padding: const EdgeInsets.only(top: 18),
+      padding: const EdgeInsets.only(top: 17),
       child: Column(
         children: <Widget>[
           Container(
-            width: 28,
-            height: 28,
+            width: 26,
+            height: 26,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: isReached ? AppColors.accentPrimary : Colors.transparent,
+              color: circleColor,
               shape: BoxShape.circle,
-              border: isReached
+              border: isCurrent || isReached
                   ? null
-                  : Border.all(color: AppColors.borderSubtle),
+                  : Border.all(
+                      color: AppColors.borderSubtle.withValues(alpha: 0.44),
+                    ),
             ),
             child: Text(
               '$number',
+              textScaler: TextScaler.noScaling,
               style: TextStyle(
-                color: isReached
-                    ? AppColors.background
-                    : AppColors.textSecondary,
+                color: numberColor,
                 fontFamily: 'monospace',
                 fontSize: 10,
                 height: 1.4,
@@ -410,7 +456,7 @@ class _StepItem extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: 11),
           Text(
             label,
             style: TextStyle(
@@ -423,8 +469,8 @@ class _StepItem extends StatelessWidget {
           const SizedBox(height: 7),
           Text(
             state,
-            style: const TextStyle(
-              color: AppColors.textSecondary,
+            style: TextStyle(
+              color: stateColor,
               fontFamily: 'monospace',
               fontSize: 8,
               height: 11 / 8,
@@ -437,18 +483,17 @@ class _StepItem extends StatelessWidget {
 }
 
 class _MicroLabel extends StatelessWidget {
-  const _MicroLabel(this.text, {this.color = AppColors.textSecondary});
+  const _MicroLabel(this.text);
 
   final String text;
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       textScaler: TextScaler.noScaling,
-      style: TextStyle(
-        color: color,
+      style: const TextStyle(
+        color: AppColors.textSecondary,
         fontFamily: 'monospace',
         fontSize: 10,
         height: 1.4,
@@ -467,19 +512,19 @@ class _StepTrackPainter extends CustomPainter {
     final double start = size.width / 8;
     final double second = size.width * 3 / 8;
     final double end = size.width * 7 / 8;
-    const double y = 32;
+    const double y = 30;
     canvas.drawLine(
       Offset(start, y),
       Offset(end, y),
       Paint()
-        ..color = AppColors.borderSubtle
+        ..color = AppColors.borderSubtle.withValues(alpha: 0.30)
         ..strokeWidth = 2,
     );
     canvas.drawLine(
       Offset(start, y),
       Offset(second, y),
       Paint()
-        ..color = AppColors.accentPrimary
+        ..color = AppColors.accentPrimary.withValues(alpha: 0.44)
         ..strokeWidth = 2,
     );
   }
