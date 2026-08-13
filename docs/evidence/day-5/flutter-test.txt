@@ -1,0 +1,15 @@
+HumanTwin AI Day 5 — Flutter test evidence
+Run date: 2026-08-13 (Asia/Shanghai)
+
+Command:
+flutter test --no-pub
+
+Result:
+00:01 +22: All tests passed!
+
+Total: 22 / 22 passed
+Exit code: 0
+
+Verified coverage includes the existing Day 1–Day 4 regression suite plus Day 5
+photo mapping, state retention, one-photo replacement and re-entry, navigation,
+incomplete-state protection, and 360x650 / 200% text behavior.

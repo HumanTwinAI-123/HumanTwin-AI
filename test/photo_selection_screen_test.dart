@@ -110,12 +110,23 @@ void main() {
       await tester.tap(find.text('下一步'));
       await tester.pumpAndSettle();
       expect(
-        find.byKey(const ValueKey<String>('photo-confirmation-placeholder')),
+        find.byKey(const ValueKey<String>('photo-confirmation-card-front')),
         findsOneWidget,
       );
-      expect(find.text('DAY 5 · PLACEHOLDER'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey<String>('photo-confirmation-card-side')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey<String>('photo-confirmation-card-back')),
+        findsOneWidget,
+      );
+      expect(find.text('确认三视图照片'), findsOneWidget);
+      expect(find.text('DAY 5 · PLACEHOLDER'), findsNothing);
 
-      await tester.tap(find.byTooltip('返回'));
+      await tester.tap(
+        find.byKey(const ValueKey<String>('photo-confirmation-back')),
+      );
       await tester.pumpAndSettle();
       expect(
         testApp.container.read(photoFlowControllerProvider).isComplete,
