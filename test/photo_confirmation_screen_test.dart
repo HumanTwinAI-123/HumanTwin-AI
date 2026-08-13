@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:human_twin_ai/app/app.dart';
 import 'package:human_twin_ai/features/capture/photo_flow_controller.dart';
+import 'package:human_twin_ai/features/generation/digital_twin_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
 void main() {
@@ -97,11 +98,15 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.byKey(const ValueKey<String>('processing-placeholder')),
+        find.byKey(const ValueKey<String>('processing-screen')),
         findsOneWidget,
       );
-      expect(find.text('AI 生成'), findsOneWidget);
-      expect(find.text('DAY 6 · PLACEHOLDER'), findsOneWidget);
+      expect(find.text('你的数字人体已生成'), findsOneWidget);
+      expect(find.text('生成完成'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey<String>('processing-view-twin-cta')),
+        findsOneWidget,
+      );
       expect(picker.sources, <ImageSource>[
         ImageSource.gallery,
         ImageSource.gallery,
@@ -154,28 +159,26 @@ void main() {
     expect(state.back, isNull);
   });
 
-  testWidgets('direct Processing route has a safe back fallback', (
-    WidgetTester tester,
-  ) async {
-    _configureView(tester, const Size(390, 844));
-    final _ConfirmationTestApp app = await _pumpConfirmationApp(
-      tester,
-      FakeConfirmationImagePicker(),
-    );
+  testWidgets(
+    'direct incomplete Processing route returns safely to Selection',
+    (WidgetTester tester) async {
+      _configureView(tester, const Size(390, 844));
+      final _ConfirmationTestApp app = await _pumpConfirmationApp(
+        tester,
+        FakeConfirmationImagePicker(),
+      );
 
-    app.router.go('/processing');
-    await tester.pumpAndSettle();
-    await tester.tap(
-      find.byKey(const ValueKey<String>('processing-placeholder-back')),
-    );
-    await tester.pumpAndSettle();
+      app.router.go('/processing');
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.byKey(const ValueKey<String>('processing-incomplete-action')),
+      );
+      await tester.pumpAndSettle();
 
-    expect(
-      find.byKey(const ValueKey<String>('photo-confirmation-incomplete')),
-      findsOneWidget,
-    );
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.text('选择三视图照片'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('Confirmation stays scrollable at 360dp and 200% text', (
     WidgetTester tester,
@@ -255,6 +258,9 @@ Future<_ConfirmationTestApp> _pumpConfirmationApp(
     overrides: [
       imagePickerProvider.overrideWithValue(picker),
       lostDataRecoverySupportedProvider.overrideWithValue(false),
+      digitalTwinRepositoryProvider.overrideWithValue(
+        MockDigitalTwinRepository(delay: Duration.zero),
+      ),
     ],
   );
   final GoRouter router = createAppRouter();

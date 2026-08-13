@@ -8,6 +8,7 @@ import '../features/capture/photo_guide_screen.dart';
 import '../features/capture/photo_flow_controller.dart';
 import '../features/capture/photo_confirmation_screen.dart';
 import '../features/capture/photo_selection_screen.dart';
+import '../features/generation/processing_screen.dart';
 import '../features/home/home_screen.dart';
 import 'theme/app_theme.dart';
 
@@ -37,7 +38,7 @@ GoRouter createAppRouter() {
       GoRoute(
         path: '/processing',
         builder: (BuildContext context, GoRouterState state) =>
-            const ProcessingPlaceholderScreen(),
+            const ProcessingScreen(),
       ),
     ],
   );
