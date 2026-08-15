@@ -10,9 +10,10 @@ import '../features/capture/photo_confirmation_screen.dart';
 import '../features/capture/photo_selection_screen.dart';
 import '../features/generation/processing_screen.dart';
 import '../features/home/home_screen.dart';
+import '../features/viewer/digital_twin_viewer.dart';
 import 'theme/app_theme.dart';
 
-GoRouter createAppRouter() {
+GoRouter createAppRouter({WidgetBuilder? viewerBuilder}) {
   return GoRouter(
     routes: <RouteBase>[
       GoRoute(
@@ -39,6 +40,11 @@ GoRouter createAppRouter() {
         path: '/processing',
         builder: (BuildContext context, GoRouterState state) =>
             const ProcessingScreen(),
+      ),
+      GoRoute(
+        path: '/viewer',
+        builder: (BuildContext context, GoRouterState state) =>
+            viewerBuilder?.call(context) ?? const ViewerScreen(),
       ),
     ],
   );

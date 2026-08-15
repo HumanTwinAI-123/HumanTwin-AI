@@ -162,8 +162,7 @@ class _ProcessingContent extends ConsumerWidget {
             key: const ValueKey<String>('processing-view-twin-cta'),
             label: '查看数字人体',
             width: double.infinity,
-            // Day 7 will connect this stable boundary to the existing Viewer.
-            onPressed: _holdForDay7,
+            onPressed: () => context.push('/viewer'),
           ),
         ],
         if (generation.status == GenerationStatus.failure) ...<Widget>[
@@ -639,5 +638,3 @@ void _returnFromProcessing(BuildContext context) {
     context.go('/photo-confirmation');
   }
 }
-
-void _holdForDay7() {}

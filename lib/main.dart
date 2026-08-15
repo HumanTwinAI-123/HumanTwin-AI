@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 import 'app/app.dart';
+import 'features/viewer/digital_twin_viewer.dart';
 
-typedef ModelViewerBuilder = Widget Function();
+export 'features/viewer/digital_twin_viewer.dart'
+    show DigitalTwinViewerPage, ModelViewerBuilder, buildHumanModelViewer;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,63 +110,4 @@ class ViewerLauncherPage extends StatelessWidget {
       ),
     );
   }
-}
-
-class DigitalTwinViewerPage extends StatelessWidget {
-  const DigitalTwinViewerPage({required this.modelViewerBuilder, super.key});
-
-  final ModelViewerBuilder modelViewerBuilder;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('3D Digital Twin')),
-      body: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: RepaintBoundary(
-              key: const ValueKey<String>('model-viewer-host'),
-              child: modelViewerBuilder(),
-            ),
-          ),
-          Positioned(
-            left: 16,
-            right: 16,
-            bottom: 16,
-            child: IgnorePointer(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: const Color(0xE61B1F24),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Text(
-                    'Drag to rotate  •  Pinch to zoom  •  Auto-rotate on',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-ModelViewer buildHumanModelViewer() {
-  return const ModelViewer(
-    src: 'assets/models/human_demo.glb',
-    alt: 'Synthetic human figure used to validate the 3D digital twin viewer',
-    cameraControls: true,
-    autoRotate: true,
-    disableZoom: false,
-    loading: Loading.eager,
-    backgroundColor: Color(0xFFDDE6F2),
-  );
 }

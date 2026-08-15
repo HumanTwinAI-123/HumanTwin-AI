@@ -13,7 +13,7 @@ import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 void main() {
   testWidgets(
-    'Processing starts once, rebuild stays processing, and success exposes Day 7 CTA',
+    'Success opens Viewer, returns without regenerating, and reopens safely',
     (WidgetTester tester) async {
       _configureView(tester, const Size(390, 844));
       final Completer<void> completion = Completer<void>();
@@ -67,9 +67,34 @@ void main() {
       await tester.tap(
         find.byKey(const ValueKey<String>('processing-view-twin-cta')),
       );
-      await tester.pump();
-      expect(app.router.state.matchedLocation, '/processing');
+      await tester.pumpAndSettle();
+
+      expect(app.router.state.matchedLocation, '/viewer');
+      expect(
+        find.byKey(const ValueKey<String>('fake-viewer-screen')),
+        findsOneWidget,
+      );
       expect(find.byType(ModelViewer), findsNothing);
+      expect(repository.callCount, 1);
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(app.router.state.matchedLocation, '/processing');
+      expect(find.text('你的数字人体已生成'), findsOneWidget);
+      expect(find.text('生成完成'), findsOneWidget);
+      expect(repository.callCount, 1);
+
+      await tester.tap(
+        find.byKey(const ValueKey<String>('processing-view-twin-cta')),
+      );
+      await tester.pumpAndSettle();
+
+      expect(app.router.state.matchedLocation, '/viewer');
+      expect(
+        find.byKey(const ValueKey<String>('fake-viewer-screen')),
+        findsOneWidget,
+      );
       expect(repository.callCount, 1);
     },
   );
@@ -257,7 +282,9 @@ Future<_ProcessingTestApp> _pumpApp(
       ),
     ],
   );
-  final GoRouter router = createAppRouter();
+  final GoRouter router = createAppRouter(
+    viewerBuilder: (BuildContext context) => const _FakeViewerRoute(),
+  );
   addTearDown(container.dispose);
   addTearDown(router.dispose);
 
@@ -276,6 +303,18 @@ class _ProcessingTestApp {
 
   final ProviderContainer container;
   final GoRouter router;
+}
+
+class _FakeViewerRoute extends StatelessWidget {
+  const _FakeViewerRoute();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      key: ValueKey<String>('fake-viewer-screen'),
+      body: Center(child: Text('Viewer test route')),
+    );
+  }
 }
 
 class _SeededPhotoFlowController extends PhotoFlowController {
