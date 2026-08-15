@@ -140,23 +140,42 @@ class _Brand extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text.rich(
-      TextSpan(
-        children: <InlineSpan>[
-          TextSpan(
-            text: 'HumanTwin',
-            style: TextStyle(color: AppColors.textPrimary),
-          ),
-          TextSpan(
-            text: ' AI',
-            style: TextStyle(color: AppColors.accentPrimary),
-          ),
-        ],
-      ),
-      style: TextStyle(
-        fontSize: 16,
-        height: 22 / 16,
-        fontWeight: FontWeight.w500,
+    return Semantics(
+      image: true,
+      label: 'HumanTwin AI',
+      child: ExcludeSemantics(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image.asset(
+              'assets/images/brand/humantwin_mark.png',
+              key: const ValueKey<String>('humantwin-brand-mark'),
+              width: 22,
+              height: 22,
+              filterQuality: FilterQuality.high,
+            ),
+            const SizedBox(width: 8),
+            const Text.rich(
+              TextSpan(
+                children: <InlineSpan>[
+                  TextSpan(
+                    text: 'HumanTwin',
+                    style: TextStyle(color: AppColors.textPrimary),
+                  ),
+                  TextSpan(
+                    text: ' AI',
+                    style: TextStyle(color: AppColors.accentPrimary),
+                  ),
+                ],
+              ),
+              style: TextStyle(
+                fontSize: 16,
+                height: 22 / 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

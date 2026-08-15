@@ -23,4 +23,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/brand/
     - assets/models/human_demo.glb
