@@ -1,0 +1,11 @@
+SYSTEM cycle=1 enter_to_back=0.60s pending_latency=1.2933934999164194 pid=2196->2196 PASS
+SYSTEM cycle=2 enter_to_back=0.70s pending_latency=1.9575519999489188 pid=2196->2196 PASS
+SYSTEM cycle=3 enter_to_back=0.80s pending_latency=2.017883750027977 pid=2196->2196 PASS
+SYSTEM cycle=4 enter_to_back=0.95s pending_latency=1.701010916964151 pid=2196->2196 PASS
+SYSTEM cycle=5 enter_to_back=1.10s pending_latency=1.2968230829574168 pid=2196->2196 PASS
+SYSTEM cycle=6 enter_to_back=0.60s pending_latency=2.1836800830205902 pid=2196->2196 PASS
+SYSTEM cycle=7 enter_to_back=0.70s pending_latency=1.5117507090326399 pid=2196->2196 PASS
+SYSTEM cycle=8 enter_to_back=0.80s pending_latency=2.0927570411004126 pid=2196->2196 PASS
+SYSTEM cycle=9 enter_to_back=0.95s pending_latency=2.0270837920252234 pid=2196->2196 PASS
+SYSTEM cycle=10 enter_to_back=1.10s pending_latency=1.685412000049837 pid=2196->2196 PASS
+SYSTEM_RESULT=10/10 latency_min=1.293s latency_max=2.184s

@@ -1,0 +1,11 @@
+UI cycle=1 enter_to_back=0.65s pending_latency=1.734400499961339 pid=2196->2196 PASS
+UI cycle=2 enter_to_back=0.70s pending_latency=2.234522582963109 pid=2196->2196 PASS
+UI cycle=3 enter_to_back=0.80s pending_latency=2.872632957994938 pid=2196->2196 PASS
+UI cycle=4 enter_to_back=0.95s pending_latency=2.3136224589543417 pid=2196->2196 PASS
+UI cycle=5 enter_to_back=1.10s pending_latency=1.7159174589905888 pid=2196->2196 PASS
+UI cycle=6 enter_to_back=0.65s pending_latency=2.119224500027485 pid=2196->2196 PASS
+UI cycle=7 enter_to_back=0.70s pending_latency=2.5295525830006227 pid=2196->2196 PASS
+UI cycle=8 enter_to_back=0.80s pending_latency=2.087563999928534 pid=2196->2196 PASS
+UI cycle=9 enter_to_back=0.95s pending_latency=1.4512054160004482 pid=2196->2196 PASS
+UI cycle=10 enter_to_back=1.10s pending_latency=1.8213101660367101 pid=2196->2196 PASS
+UI_RESULT=10/10 latency_min=1.451s latency_max=2.873s

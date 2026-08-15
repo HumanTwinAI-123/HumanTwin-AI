@@ -1,0 +1,50 @@
+00:00 +0: loading /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_flow_controller_test.dart
+00:00 +0: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_flow_controller_test.dart: starts with three independent empty slots
+00:00 +1: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/generation_controller_test.dart: starts idle and successful generation preserves the photo state
+00:00 +2: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +3: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +4: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +5: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +6: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +7: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +8: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +9: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +10: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +11: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +12: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +13: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +14: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:00 +15: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:01 +16: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:01 +17: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:01 +18: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:01 +19: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:01 +20: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:01 +21: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +22: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +23: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +24: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +25: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +26: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +27: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +28: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +29: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +30: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +31: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +31: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/viewer_screen_test.dart: Watchdog timeout alone does not unlock exit
+Viewer exit-safety watchdog could not confirm page readiness.
+00:02 +32: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:02 +33: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: three real slot states enable CTA, survive back, replace, cancel, and remove
+00:03 +34: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/viewer_poc_test.dart: Photo Guide stays usable at 360dp and 200% text
+00:03 +35: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/viewer_poc_test.dart: Photo Guide stays usable at 360dp and 200% text
+00:03 +36: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/viewer_poc_test.dart: Photo Guide stays usable at 360dp and 200% text
+00:03 +37: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: Photo Selection remains scrollable at 360dp and 200% text
+00:03 +38: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/photo_selection_screen_test.dart: Photo Selection remains scrollable at 360dp and 200% text
+00:03 +39: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/processing_screen_test.dart: Direct incomplete Processing entry returns to Photo Selection
+00:03 +40: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/processing_screen_test.dart: Direct incomplete Processing entry returns to Photo Selection
+00:03 +41: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/processing_screen_test.dart: Direct incomplete Processing entry returns to Photo Selection
+00:03 +42: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/viewer_screen_test.dart: Stale lifecycle callback is ignored after guarded reopen
+00:03 +43: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/processing_screen_test.dart: Processing remains usable at 360dp and 200 percent text
+00:03 +44: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/processing_screen_test.dart: Processing remains usable at 360dp and 200 percent text
+00:03 +45: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/test/viewer_screen_test.dart: Viewer stays usable at 360dp and 200 percent text
+00:03 +46: All tests passed!

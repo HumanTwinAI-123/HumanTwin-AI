@@ -1,0 +1,19 @@
+ACTIVITY MANAGER LAST ANR (dumpsys activity lastanr)
+  ANR time: Aug 15, 2026 12:59:19 PM
+  Reason: Input dispatching timed out (PointerEventDispatcher0 is not responding. Waited 5002ms for KeyEvent(deviceId=-1, eventTime=562557286000000, source=UNKNOWN, displayId=-1, action=UP, flags=0x00000000, keyCode=BACK(4), scanCode=0, metaState=0x00000000, repeatCount=0), policyFlags=0x6b000000).
+
+
+  ResumedActivity: ActivityRecord{31238424 u0 com.example.human_twin_ai/.MainActivity t28}
+  LockTaskController:
+    mLockTaskModeState=NONE
+    mLockTaskModeTasks=
+    mLockTaskPackages (userId:packages)=
+
+  KeyguardController:
+    mKeyguardShowing=false
+    mAodShowing=false
+    mKeyguardGoingAway=false
+   KeyguardShowing=false AodShowing=false KeyguardGoingAway=false DismissalRequested=false  Occluded=false DismissingKeyguardActivity=null TurnScreenOnActivity=null at display=0
+    mDismissalRequested=false
+
+-------------------------------------------------------------------------------

@@ -1,0 +1,6 @@
+DEBUG cycle=1 back=UI enter_to_back=0.70s pending_latency=3.7088614590466022 pid=11889->11889 diagnostic_error=False PASS
+DEBUG cycle=2 back=SYSTEM enter_to_back=0.70s pending_latency=1.9858812920283526 pid=11889->11889 diagnostic_error=False PASS
+DEBUG cycle=3 back=UI enter_to_back=0.80s pending_latency=2.7508031660690904 pid=11889->11889 diagnostic_error=False PASS
+DEBUG cycle=4 back=SYSTEM enter_to_back=0.80s pending_latency=1.6688340000109747 pid=11889->11889 diagnostic_error=False PASS
+DEBUG cycle=5 back=UI enter_to_back=0.65s pending_latency=2.1030760830035433 pid=11889->11889 diagnostic_error=False PASS
+DEBUG_RESULT=5/5

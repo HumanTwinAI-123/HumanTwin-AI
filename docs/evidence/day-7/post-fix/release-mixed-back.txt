@@ -1,0 +1,5 @@
+MIXED case=UIx3 latency=1.808330166968517 stable_processing=True pid=2196->2196 PASS
+MIXED case=SYSTEMx3 latency=1.8292995829833671 stable_processing=True pid=2196->2196 PASS
+MIXED case=UI_then_SYSTEM latency=2.478877541027032 stable_processing=True pid=2196->2196 PASS
+MIXED case=SYSTEM_then_UI latency=2.8610675829695538 stable_processing=True pid=2196->2196 PASS
+MIXED_RESULT=4/4 exactly-one-pop route=ProcessingSuccess

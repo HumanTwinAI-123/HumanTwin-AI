@@ -1,0 +1,46 @@
+HumanTwin AI Day 7 P1 Android Re-Verification
+Date: 2026-08-15 Asia/Shanghai
+
+Device: emulator-5554 / sdk_gphone64_arm64 / Android 16 / API 36 / HumanTwin_API_36
+HEAD: 0ca27b444b494bfd1c246534178cb0796c02e4ec
+origin/main: 0ca27b444b494bfd1c246534178cb0796c02e4ec
+
+Release APK: PASS, 51,849,222 bytes
+Release PID: 2196 -> 2196
+Release rapid exits: 20/20 PASS
+  UI back: 10/10, observed pending latency 1.451-2.873 s
+  System back: 10/10, observed pending latency 1.293-2.184 s
+Mixed/repeated back: 4/4 PASS, exactly one final pop to Processing Success
+Release renderer code -1: 3
+
+Debug rapid exits: 5/5 PASS
+Debug PID: 11889 -> 11889
+setState() called after dispose: 0
+ModelViewerState._initController / null-check async errors: 0
+Debug renderer code -1: 4
+
+App ANR: 0
+system_server ANR caused by flow: 0
+FATAL EXCEPTION: 0
+App process restart: 0
+Socket/proxy/bind/HttpServer errors: 0
+Sustained blank/white Viewer: 0
+
+Post-stress counted normal Viewer cycles: 3/3 PASS
+GLB render: PASS
+Auto-rotate: PASS
+Drag rotate: PASS
+Pinch zoom: PASS (real two-pointer emulator events)
+Reload: PASS
+Reload then back: PASS
+Processing Success preserved: PASS
+Unexpected regeneration: 0
+
+flutter analyze --no-pub: PASS, 0 issues
+flutter test --no-pub: PASS, 46/46
+git diff --check: PASS
+git status --short: unchanged from starting Day 7 uncommitted state
+
+Finding: Chromium renderer code -1 repeated 7 times total (3 Release, 4 Debug).
+Classification: P0=0, P1=1, P2=0.
+Final verdict: NOT SAFE TO FREEZE.
