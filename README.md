@@ -1,143 +1,82 @@
 # HumanTwin AI
 
-AI 数字人体移动端体验 Demo。
+HumanTwin AI 是一个 Flutter Android-first AI 数字人体前端体验 Demo，用于验证完整、可信且可演示的移动端产品流程。
 
-**Current Status：Day 2 Complete · 2026-08-10**
+## 核心流程
 
-目标核心体验：
+```text
+Home
+→ Photo Guide
+→ Photo Selection
+→ Photo Confirmation
+→ Mock AI Processing
+→ 3D Viewer
+```
 
-**三视图照片 → Mock AI Generation → Interactive 3D Digital Human Viewer**
+## 当前边界
 
-本阶段计划围绕 Flutter 前端体验、Mock AI 流程和预生成本地 GLB 展开；当前不宣称已经完成真实 AI 数字人体重建。
+- 三视图照片选择、Camera / Gallery 与跨页面照片状态是真实 Flutter 功能。
+- AI Processing 使用 Mock Repository，不执行真实 AI 人体重建。
+- 3D Viewer 展示预生成的 Local GLB，支持旋转、缩放、自动旋转和重新加载。
+- 当前没有真实 backend API、照片上传或云存储。
+- Demo 的目标是验证从照片采集到数字人体查看的完整移动端产品体验。
 
-![Day 2 Flutter Home](docs/evidence/day-2/home-android-390x844.png)
+## 技术栈
 
-## Current Progress
-
-### Day 1 — Foundation & 3D Risk Validation ✅
-
-- Product scope and six-screen user flow defined
-- Figma foundation completed
-- Flutter project initialized
-- `model_viewer_plus` 1.10.0 validated
-- Local GLB loading validated
-- Rotate / Zoom / Auto Rotate validated
-- Viewer re-entry 5/5
-- `flutter analyze` passed
-- `flutter test` passed
-- Debug APK built
-
-### Day 2 — High-Fidelity Home & Flutter App Shell ✅
-
-- Clinical Spatial Premium visual direction established
-- High-Fidelity Home completed
-- Dedicated static Digital Human Hero integrated
-- Flutter Material 3 Theme implemented
-- Riverpod / go_router / image_picker dependencies locked
-- Flutter `HomeScreen` implemented
-- Home → Photo Guide placeholder route working
-- SafeArea / responsive short-screen handling implemented
-- `flutter analyze`: No issues found
-- `flutter test`: 4/4 passed
-- Day 1 Viewer regression tests still passing
-- Debug APK built
-- Dedicated `06 App UI｜正式界面` workspace created for final High-Fidelity screens
-- Six product screens organized as independent 390×844 frames with reusable component instances and variants
-- Day 2 Figma / GitHub / Notion / acceptance video archived
-
-## Demo Evidence
-
-- [Figma · 06 App UI｜正式界面](https://www.figma.com/design/JN4IsUqG7tLuwqcGbjbd1k/HumanTwin-AI-Demo?node-id=151-2)
-- [Figma final App UI workspace structure](docs/evidence/day-2/figma-app-ui-workspace.png)
-- [Figma reusable components structure](docs/evidence/day-2/figma-components-structure.png)
-- [Approved Home area screenshot](docs/evidence/day-2/app-ui-home-approved.png)
-- [Flutter Home screenshot](docs/evidence/day-2/home-android-390x844.png)
-- [Day 2 delivery demo](artifacts/day-2/02-home-delivery-demo.mp4)
-- [Day 2 cold-start acceptance video](artifacts/day-2/01-home-flutter-demo.mp4)
-- [Day 1 Viewer acceptance screenshot](artifacts/day-1/08-final-viewer.png)
-- [Day 1 Viewer demo](artifacts/day-1/07-viewer-demo.mp4)
-
-## Demo Boundary
-
-当前是 **Frontend Experience Demo**。
-
-已经完成：
-
-- Flutter UI 与 High-Fidelity Home
-- Material 3 Theme 和最小 `go_router` App Shell
-- Home → Photo Guide 占位路由
-- 预生成本地 GLB Viewer POC
-- Local GLB interactive Viewer
-
-尚未完成：
-
-- Real three-view photo selection
-- Real AI human reconstruction
-- Production backend API
-- Cloud storage
-- User accounts
-- Medical / health analysis
-
-本项目当前不是 Production Ready，也不表示三张照片已经生成真实 3D 数字人体。
-
-## Technical Baseline
-
-- Flutter 3.44.9 stable
-- Dart 3.12.2
+- Flutter 3.44.9 / Dart 3.12.2
 - Material 3
-- `flutter_riverpod` 3.3.2
-- `go_router` 17.3.0
-- `image_picker` 1.2.3
-- `model_viewer_plus` 1.10.0
-- Android minSdk 24
-- 验证模拟器：`HumanTwin_API_36`（Android 16 / API 36）
+- Riverpod
+- `go_router`
+- `image_picker` / `XFile`
+- `model_viewer_plus`
+- Local GLB
+- Mock Repository
 
-## Run Locally
+## 当前完成状态
+
+- Six-screen flow complete
+- Physical Android verified
+- Release APK validated
+- Home Hero v2 approved on Day 9
+- Release Candidate ready for Day 10 final delivery
+
+## 稳定性摘要
+
+- `flutter analyze --no-pub`：0 issues
+- `flutter test --no-pub`：46/46 PASS
+- Physical Android E2E：PASS
+- Viewer re-entry：5/5 PASS
+- Viewer rapid exit：10/10 PASS
+- Full demo loop：3/3 PASS
+- P0：0
+- P1：0
+
+完整验证证据见 [Day 9 Evidence Index](docs/evidence/day-9/README.md)。项目限制见 [Known Limitations](docs/KNOWN_LIMITATIONS.md)，正式演示流程见 [Demo Script](docs/DEMO_SCRIPT.md)。
+
+## 本地运行与验证
 
 ```bash
 flutter pub get
-flutter emulators --launch HumanTwin_API_36
-flutter devices
-flutter run -d emulator-5554
+flutter run -d <android-device-id>
 ```
-
-模拟器设备 ID 可能变化；以 `flutter devices` 的输出为准。
-
-## Validation
 
 ```bash
-dart format --output=none --set-exit-if-changed lib test
-flutter test --no-pub
 flutter analyze --no-pub
-flutter build apk --debug --no-pub
+flutter test --no-pub
+flutter build apk --release
 ```
 
-## Key Files
+## Architecture Boundary
 
-- `lib/app/app.dart`：Material App 与 Home / Photo Guide 路由
-- `lib/app/theme/app_theme.dart`：正式颜色、Typography、Spacing 与 Radius Token
-- `lib/features/home/home_screen.dart`：Day 2 High-Fidelity Home
-- `lib/features/capture/photo_guide_screen.dart`：Day 2 路由验收占位页
-- `lib/main.dart`：App 入口及保留的 Day 1 Viewer POC
-- `test/viewer_poc_test.dart`：Home、路由与 Viewer regression tests
-- `assets/images/digital_human_hero.png`：本地静态 Digital Human Hero
-- `assets/models/human_demo.glb`：本地 Viewer 测试模型
+```text
+Flutter UI
+→ Riverpod Controller
+→ DigitalTwinRepository
+→ MockDigitalTwinRepository
+```
 
-## Viewer Notes
+未来接入真实 AI API 时，目标是替换 Repository 实现，同时保持现有六屏产品流程与照片状态所有权不变。
 
-`model_viewer_plus` 在移动端通过本地 loopback HTTP 服务向 WebView 提供资源。项目没有全局开放 cleartext，而是通过 Network Security Config 仅允许 `localhost` 和 `127.0.0.1`，其他 cleartext 流量仍被拒绝。
+## Third-party Notice
 
-`human_demo.glb` 使用 Khronos glTF Sample Assets 中的 RiggedFigure，采用 CC BY 4.0 许可。完整来源和署名见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
-
-## Roadmap
-
-- Day 1 ✅ — Foundation + 3D Viewer POC
-- Day 2 ✅ — High-Fidelity Home + Flutter App Shell
-- Day 3 — Photo Guide + Shared Components
-- Day 4 — Three-view Photo Selection + `image_picker`
-- Day 5 — Photo Confirmation + State Retention
-- Day 6 — Mock AI Processing
-- Day 7 — Full Viewer Integration
-- Day 8 — Android Physical Device Validation
-- Day 9 — QA + Scope Freeze
-- Day 10 — Release Delivery
+本地 `human_demo.glb` 来自 Khronos glTF Sample Assets 的 RiggedFigure，采用 CC BY 4.0 许可。来源与署名见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
