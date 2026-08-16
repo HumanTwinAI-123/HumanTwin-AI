@@ -1,0 +1,3 @@
+308cb08bd8334caf0021a7c2d432483dc5fb3c9d25b06013c30d9e280d787614  build/app/outputs/flutter-apk/app-release.apk
+
+Exact size: 53670643 bytes

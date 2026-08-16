@@ -1,0 +1,20 @@
+HumanTwin AI - Day 9 Task 2 Physical Device
+Date: 2026-08-17
+
+adb devices -l
+d59cd208 device product:marble model:23049RAD8C device:marble
+
+Device properties
+- Serial: d59cd208
+- Model: 23049RAD8C
+- Product/device codename: marble
+- Android release: 15
+- API level: 35
+- ro.kernel.qemu: empty
+- ro.boot.qemu: empty
+- Display: 1080 x 2400
+- Density: 440 dpi
+
+Conclusion
+- adb state: device
+- Target is a physical Android device, not an emulator

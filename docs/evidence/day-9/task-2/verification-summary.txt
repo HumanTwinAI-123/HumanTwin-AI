@@ -1,0 +1,59 @@
+HumanTwin AI - Day 9 Task 2 Verification Summary
+Date: 2026-08-17
+Task: Physical Android Stability Regression + Release Candidate Validation
+
+Baseline
+- Branch: main
+- HEAD: 08bf6ed9d940cf548f98a5b75bb53853faee8a23
+- origin/main: 08bf6ed9d940cf548f98a5b75bb53853faee8a23
+- Preflight working tree: clean
+- Device: d59cd208 / 23049RAD8C / physical Android 15 (API 35)
+
+Automated gates
+- flutter analyze --no-pub: PASS, 0 issues
+- flutter test --no-pub: PASS, 46/46
+- git diff --check before evidence: PASS
+
+Release candidate
+- flutter build apk --release: PASS
+- APK: build/app/outputs/flutter-apk/app-release.apk
+- Size: 53,670,643 bytes (53.7 MB build output; 52M on disk)
+- SHA-256: 308cb08bd8334caf0021a7c2d432483dc5fb3c9d25b06013c30d9e280d787614
+- adb install -r to d59cd208: PASS
+- Package: com.example.human_twin_ai, versionName 0.1.0, versionCode 1
+- Release proof: run-as rejected because package is not debuggable
+
+Physical Android results
+- Release full E2E: PASS
+- Camera and Gallery: PASS
+- Cancel / Replace / Remove: PASS
+- Photo state regression: PASS
+- Processing and Success: PASS
+- Viewer rotate / zoom / autoRotate / reload: PASS
+- Viewer UI Back / Android System Back: PASS
+- Viewer re-entry: 5/5 PASS
+- Viewer rapid exit: 10/10 PASS; next Viewer entry also PASS
+- Continuous full demo loop: 3/3 PASS in one app process
+- App PID remained 28004 for the entire validation run
+- Persistent white screen: 0
+- Unexpected app process restart: 0
+
+Log audit
+- App ANR: 0
+- FATAL EXCEPTION: 0
+- FlutterError / Unhandled Exception: 0
+- App process death: 0
+- Out-of-memory event: 0
+- App crash event: 0
+- Chromium renderer code -1: 7 isolated teardown records; non-blocking P2
+- Main app exit during the test window: only expected PACKAGE UPDATED during install
+
+Severity
+- P0: 0
+- P1: 0
+- P2: 4 observation categories, recorded without code changes
+
+Result
+- DAY 9 TASK 2: PASS
+- PHYSICAL ANDROID STABILITY REGRESSION: PASS
+- RELEASE CANDIDATE VALIDATED: YES

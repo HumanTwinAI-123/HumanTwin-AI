@@ -1,0 +1,41 @@
+HumanTwin AI - Day 9 Task 2 Viewer Stability Results
+Date: 2026-08-17
+Device: d59cd208 / 23049RAD8C
+App process PID: 28004
+
+Viewer re-entry, required 5/5
+- Run 1, UI Back: PASS; Viewer route 1, Processing return 1, PID 28004 -> 28004.
+- Run 2, System Back: PASS; Viewer route 1, Processing return 1, PID 28004 -> 28004.
+- Run 3, UI Back: PASS; Viewer route 1, Processing return 1, PID 28004 -> 28004.
+- Run 4, System Back: PASS; Viewer route 1, Processing return 1, PID 28004 -> 28004.
+- Run 5, UI Back: PASS; Viewer route 1, Processing return 1, PID 28004 -> 28004.
+- Viewer screenshots had model bright-area ratios 0.1483 to 0.1598 and near-white ratios 0.0091 to 0.0096; no persistent white screen was observed.
+
+Rapid Viewer exit, required 10 times
+- Runs 1-10: PASS.
+- UI Back and Android System Back alternated.
+- Every run returned to Processing Success.
+- PID remained 28004 for every run.
+- The next full Viewer entry after run 10 also loaded successfully.
+- Post-stress model bright-area ratio: 0.1563; near-white ratio: 0.0094.
+
+Continuous full demo loop, required 3/3
+- Runs 1-3: PASS within the same Release process.
+- Home Hero, Guide, Selection, retained three-photo state, Confirmation, Processing Success, Viewer, and return all passed each run.
+- Viewer model bright-area ratios: 0.1747 to 0.1755.
+- Viewer near-white ratios: 0.0097 to 0.0099.
+
+Lifecycle log interpretation
+- Seven Chromium renderer code -1 messages were recorded during Viewer teardown/re-entry activity.
+- Each associated process was an isolated WebView sandbox process.
+- ApplicationExitInfo classified them as EXIT_SELF or OTHER KILLS BY SYSTEM with subreason ISOLATED NOT NEEDED and status 0.
+- The Flutter app PID never changed and every subsequent Viewer entry loaded.
+- Classification: known non-blocking P2 lifecycle/renderer teardown observation; not an app crash.
+
+Result
+- Viewer rotate / zoom / autoRotate / reload: PASS
+- Viewer re-entry: 5/5 PASS
+- Viewer rapid exit: 10/10 PASS
+- Full demo loop: 3/3 PASS
+- Viewer P0: 0
+- Viewer P1: 0

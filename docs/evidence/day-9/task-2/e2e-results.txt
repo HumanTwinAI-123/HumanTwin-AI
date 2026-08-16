@@ -1,0 +1,47 @@
+HumanTwin AI - Day 9 Task 2 Physical Release E2E Results
+Date: 2026-08-17
+Device: d59cd208 / 23049RAD8C / Android 15 API 35
+Build: Release APK, SHA-256 308cb08bd8334caf0021a7c2d432483dc5fb3c9d25b06013c30d9e280d787614
+
+Primary full flow
+1. Home: PASS; Hero v2 fully visible, no clipping or white block.
+2. Photo Guide: PASS.
+3. Photo Selection: PASS; distinct front, side, and back images selected using Android Photo Picker.
+4. Photo Confirmation: PASS; three photos mapped correctly.
+5. AI Processing: PASS; processing state shown, then success shown once.
+6. Viewer: PASS; local GLB loaded and remained interactive.
+
+Photo source and state regression
+- Gallery select: PASS.
+- Gallery cancel: PASS; all three photos retained and CTA remained enabled.
+- Camera cancel: PASS; real MIUI Camera opened and system Back returned safely.
+- Gallery replace: PASS; selected slot preview changed while the other slots remained intact.
+- Camera replace: PASS; real shutter and camera confirmation were used; preview changed.
+- Remove: PASS; removed slot became empty and CTA became disabled.
+- Restore removed slot: PASS; all three photos present and CTA enabled again.
+- Selection -> Confirmation -> Back -> Selection: PASS; all photo state retained.
+
+Processing regression
+- Processing -> Success: PASS.
+- No double navigation: observed 0.
+- No unexpected generation restart: observed 0.
+
+Viewer interactions
+- Rotate: PASS; before/after screenshot mean pixel difference 18.2772.
+- Pinch zoom: PASS; before/after screenshot mean pixel difference 29.4806.
+- autoRotate: PASS; two-second capture difference 13.1182.
+- Reload: PASS; immediate/loaded difference 22.3870 and model returned.
+- Viewer UI Back: PASS.
+- Android System Back: PASS.
+
+Continuous full demo loop, same Release process
+- Run 1: PASS; PID 28004 -> 28004; photos 3/3; Viewer and return PASS.
+- Run 2: PASS; PID 28004 -> 28004; photos 3/3; Viewer and return PASS.
+- Run 3: PASS; PID 28004 -> 28004; photos 3/3; Viewer and return PASS.
+
+New Task 2 recording
+- File: day9-task2-release-e2e.mp4
+- Codec/resolution/frame rate: H.264, 1080 x 2400, 60 fps
+- Duration: 26.566756 seconds
+- SHA-256: bdc47164f21eaa395fc32ff5cbf846347b408bac68ca068d1348b4f44fa3860b
+- This recording was captured from the Day 9 Task 2 Release installation and was not reused from Day 8.

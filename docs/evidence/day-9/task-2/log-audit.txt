@@ -1,0 +1,38 @@
+HumanTwin AI - Day 9 Task 2 Final Log Audit
+Date: 2026-08-17
+Scope: logcat was cleared after Release installation and before the cold start; this audit covers the complete physical-device validation run and the new recording.
+
+Blocking indicators
+- ANR in com.example.human_twin_ai: 0
+- FATAL EXCEPTION: 0
+- FlutterError / Unhandled Exception: 0
+- com.example.human_twin_ai process death: 0
+- OutOfMemoryError / app low-memory kill: 0
+- App crash event: 0
+- Persistent white screen: 0
+- Unexpected app process restart: 0
+
+Process continuity
+- App PID after cold launch: 28004
+- App PID after photo regression: 28004
+- App PID after Viewer re-entry 5/5: 28004
+- App PID after rapid Viewer exit 10/10: 28004
+- App PID after full demo loop 3/3: 28004
+- App PID after recording: 28004
+
+ApplicationExitInfo
+- Main app record inside the validation window: PACKAGE UPDATED during adb install, expected.
+- No main app ANR, crash, signal, or unexpected-kill record occurred after the validated cold launch.
+- Seven WebView sandbox renderer exits were classified as isolated processes no longer needed, status 0.
+
+P2 observations, recorded without code changes
+1. Seven Chromium `Renderer process (...) crash detected (code -1)` teardown messages. All mapped to isolated WebView sandbox exits and did not affect the main app process, Viewer reload, re-entry, or demo loops.
+2. MIUI ActivityThread `deliverResultsIfNeeded` NPE logs appeared around picker/camera result delivery. Gallery and Camera cancel/replace, photo state, and return navigation all passed.
+3. Device graphics/WebView emitted qdgralloc, Gralloc, AHardwareBuffer, and feature-support warnings. GLB rendering and interaction remained successful.
+4. Release build/tooling emitted non-blocking version/font/SDK notices, and apkanalyzer did not locate its preferred latest build tools. The Release APK built, installed, launched, and was independently inspected with Android 36.0.0 aapt2.
+
+Severity conclusion
+- P0: 0
+- P1: 0
+- P2: 4 observation categories
+- Log audit result: PASS

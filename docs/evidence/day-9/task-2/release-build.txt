@@ -1,0 +1,33 @@
+HumanTwin AI - Day 9 Task 2 Release Build and Install
+Date: 2026-08-17
+
+Command
+flutter build apk --release
+
+Result
+- PASS
+- Output: build/app/outputs/flutter-apk/app-release.apk
+- Flutter output size: 53.7 MB
+- Exact size: 53,670,643 bytes
+
+APK metadata
+- Package: com.example.human_twin_ai
+- Version code: 1
+- Version name: 0.1.0
+- Launchable activity: com.example.human_twin_ai.MainActivity
+- Target SDK: 36
+
+Physical installation
+- Command: adb -s d59cd208 install -r build/app/outputs/flutter-apk/app-release.apk
+- Result: Success
+- Cold launch: Status ok, LaunchState COLD, TotalTime 705 ms, WaitTime 718 ms
+- Installed ABI: arm64-v8a
+- Package flags did not contain DEBUGGABLE
+- adb run-as result: package not debuggable
+
+Non-blocking build/tooling observations
+- Dependency update notices were informational; no package update was run.
+- Android SDK XML/tool-version warning did not block the build.
+- CupertinoIcons was expected but MaterialIcons was the only bundled font; no visual failure was observed.
+- MaterialIcons tree shaking completed normally.
+- apkanalyzer could not locate its preferred latest build tools; APK metadata was verified with the installed Android 36.0.0 aapt2 instead.
