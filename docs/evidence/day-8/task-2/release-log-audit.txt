@@ -1,0 +1,18 @@
+HumanTwin AI — Day 8 Task 2 Release log audit
+
+Observed app PID: 28371 from launch through Viewer back/re-entry.
+
+Not observed
+- ANR in com.example.human_twin_ai
+- FATAL EXCEPTION attributable to com.example.human_twin_ai
+- FlutterError
+- setState() called after dispose
+- app process death or restart
+- sustained blank Viewer
+- unexpected regeneration
+
+Non-blocking platform observations
+- MIUI ActivityThread logged one non-fatal `fail in deliverResultsIfNeeded` NullPointerException at Release launch. It did not terminate the app, surface an error, lose state, or change PID.
+- Android logged `OnBackInvokedCallback is not enabled` warnings. Existing UI back and system back behavior remained functional.
+- WebView/media capability and vendor display-property warnings were emitted without functional degradation.
+- The historical Day 7 Chromium renderer code -1 teardown message was not observed in this Release audit.

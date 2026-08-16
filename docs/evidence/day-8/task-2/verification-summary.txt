@@ -1,0 +1,51 @@
+HumanTwin AI — Day 8 Task 2 Physical Android E2E Verification
+Date: 2026-08-16
+Baseline: HEAD == origin/main == 0f463a6b346c55009d84e91f5581ab253031e629
+Code modifications: none
+
+1. Physical device: PASS — Xiaomi 23049RAD8C, serial d59cd208, USB, ADB device.
+2. Android/API: Android 15 / API 35.
+3. Debug build/install/launch: PASS. Initial install was blocked while the phone was locked (`INSTALL_FAILED_USER_RESTRICTED`); install succeeded after unlock.
+4. Home logo: PASS — sharp, unclipped, correctly sized/spaced, no purple palette leakage; Hero/CTA/layout unchanged.
+5. Gallery: PASS — real Android Photo Picker used for front, side, and back.
+6. Camera: PASS — Xiaomi camera launched, captured, confirmed, and returned to the app.
+7. Gallery cancel: PASS — returned with state unchanged.
+8. Camera cancel: PASS — Android back returned with existing state unchanged.
+9. Replace: PASS — Gallery replacement and Camera replacement exercised.
+10. Remove: PASS — front removed, completeness/CTA updated, then restored.
+11. Slot correctness: PASS — front/side/back remained correctly assigned.
+12. State preservation: PASS — Selection -> Confirmation -> Back -> Selection retained all three XFiles; Processing did not reset them.
+13. Lifecycle/lost-data attempt: normal picker/camera Activity interruptions passed. Deterministic low-memory recreation was not reproduced. `am kill` did not terminate the process; `force-stop` correctly stopped result delivery. A Debug same-UID process kill while Photo Picker was foreground terminated the app without marking it stopped, but MIUI returned to the underlying Settings page after selection and did not recreate MainActivity; manual launch opened Home. No crash, duplicate, or slot corruption was observed, but lost-data recovery itself is NOT claimed as a deterministic PASS.
+14. Processing: PASS — mock-only flow, stable Success, no backend claim, no duplicate generation.
+15. Viewer cycles: 3 / 3 PASS.
+16. GLB: PASS — local GLB rendered every cycle and in Release.
+17. Drag rotate: PASS.
+18. Real pinch zoom: PASS — manually exercised on physical glass in all three cycles and Release; post-gesture screenshots retained.
+19. autoRotate: PASS — time-separated frames showed changing model orientation.
+20. Reload: PASS — model reset/reloaded and remained interactive.
+21. Back/re-entry: PASS — returned to Processing Success and reopened Viewer; PID remained stable.
+22. Unexpected regeneration: none observed.
+23. Full Debug E2E repetition: 3 / 3 PASS — Gallery normal; Camera; cancel + replace/remove.
+24. Release APK build: PASS — `flutter build apk --release`.
+25. APK size: 51,862,872 bytes (Flutter output 51.9 MB; `du` 50M).
+26. Release install: PASS on d59cd208; installed package is non-debuggable.
+27. Release full flow: PASS — launch, picker, Confirmation, Processing, Viewer, GLB, rotate, zoom, reload, back/re-entry.
+28. Visual check: PASS — Chinese typography, safe areas, logo, Hero, CTA, photo slots, Confirmation, Processing, Viewer, dark contrast, gesture area, clipping/overflow inspected with no blocking issue.
+29. ANR: none observed.
+30. FATAL EXCEPTION: none attributable to the app.
+31. FlutterError: none observed.
+32. Process restart: none during normal Debug/Release flows; stable Release PID 28371 through Viewer re-entry.
+33. Analyze: PASS — 0 issues.
+34. Tests: PASS — 46 / 46.
+35. Diff check: PASS — `git diff --check` exit 0.
+36. Git status: no tracked changes; only untracked Day 8 Task 1 and Task 2 evidence.
+37. Evidence: `docs/evidence/day-8/task-2/` screenshots, two Release recordings, and text reports.
+38. P0: 0.
+39. P1: 0.
+40. P2: platform/build warnings and an incomplete deterministic lost-data recreation scenario; no observed functional degradation. One transient USB ADB disconnect recovered immediately with the same app PID/state.
+41. FINAL: READY TO FREEZE DAY 8.
+
+Recording note
+- `release-full-flow.mp4`: 179.954 s, 30,931,921 bytes. Covers Home through loaded/interacting Viewer; Android screenrecord stopped at its 180-second limit.
+- `release-viewer-interactions.mp4`: 59.975 s, 9,714,761 bytes. Supplemental Viewer auto-rotate/drag/reload footage; it reached the 60-second limit before the final manual gesture response.
+- Release pinch and back/re-entry are additionally evidenced by `release-viewer-pinch.png`, `release-viewer-pinch-recorded.png`, `release-back-to-success.png`, `release-viewer-reentry.png`, and stable PID observations.

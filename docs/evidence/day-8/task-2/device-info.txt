@@ -1,0 +1,26 @@
+HumanTwin AI — Day 8 Task 2 physical-device information
+Date: 2026-08-16 (Asia/Shanghai)
+
+Acceptance device
+- Manufacturer: Xiaomi
+- Model: 23049RAD8C
+- Product/device: marble
+- Serial / Flutter device ID: d59cd208
+- Connection: USB
+- ADB state: device
+- Android: 15
+- API: 35
+- Physical display: 1080 x 2400
+- Physical density: 440 dpi
+
+Installed Release package
+- Application ID: com.example.human_twin_ai
+- versionName: 0.1.0
+- versionCode: 1
+- minSdk: 24
+- targetSdk: 36
+- Release confirmation: `run-as` reports "package not debuggable"
+
+Repository baseline
+- HEAD: 0f463a6b346c55009d84e91f5581ab253031e629
+- origin/main: 0f463a6b346c55009d84e91f5581ab253031e629

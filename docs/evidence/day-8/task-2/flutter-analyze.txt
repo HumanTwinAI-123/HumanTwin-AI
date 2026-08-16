@@ -1,0 +1,4 @@
+Command: flutter analyze --no-pub
+Result: PASS
+Exit code: 0
+Output: No issues found! (ran in 2.1s)
