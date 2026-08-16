@@ -1,0 +1,37 @@
+HumanTwin AI — Day 9 Task 1 Verification Summary
+
+Date: 2026-08-17
+Task: Day 9 Task 1 — Promote Home Hero v2 to main
+
+Git
+- Day 8 frozen baseline: 9aab60ed1a23c66bf6f59effebc90cbd6f8a1e57
+- Feature branch: ui/home-hero-v2
+- Feature commit: e9fe65184bfbeff6b47912decaacdf09f66a3631
+- Merge commit: 760058d24f9d7bedff2a32f8b7718eeac5a968ca
+- Main verified application HEAD: 760058d24f9d7bedff2a32f8b7718eeac5a968ca
+- Day 8 frozen baseline remains an ancestor of main: YES
+
+Changed application files
+- M lib/features/home/home_screen.dart
+- A assets/images/digital_human_hero_v2.png
+- assets/images/digital_human_hero.png remains present: YES
+
+Scope audit
+- Feature diff contains exactly the two expected application files: PASS
+- Photo Guide, Photo Selection, Photo Confirmation, AI Processing,
+  3D Viewer, Riverpod, go_router, repository, pubspec dependencies,
+  Android native files, and test architecture unchanged: PASS
+- No Bottom Navigation, Profile, History, Health, AR, Backend, Firebase,
+  real AI, new screen, or seventh core screen added: PASS
+
+Verification
+- flutter analyze --no-pub: PASS — No issues found
+- flutter test --no-pub: PASS — 46/46 tests passed
+- git diff --check: PASS
+- P0: 0
+- P1: 0
+- P2: 0
+
+Task boundaries
+- Android E2E: NOT RUN in Task 1
+- Day 9 Task 2: NOT STARTED
