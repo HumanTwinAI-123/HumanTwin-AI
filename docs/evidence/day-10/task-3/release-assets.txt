@@ -1,0 +1,46 @@
+HumanTwin AI — Day 10 Task 3 Release Assets
+
+1. HumanTwin-AI-v0.1.0.apk
+- Asset ID: 518239827
+- Size: 53670643 bytes
+- GitHub state: uploaded
+- GitHub digest: sha256:308cb08bd8334caf0021a7c2d432483dc5fb3c9d25b06013c30d9e280d787614
+- Expected local SHA-256: 308cb08bd8334caf0021a7c2d432483dc5fb3c9d25b06013c30d9e280d787614
+- Independent download size: 53670643 bytes
+- Independent download SHA-256: 308cb08bd8334caf0021a7c2d432483dc5fb3c9d25b06013c30d9e280d787614
+- Downloaded APK archive check: PASS
+
+2. humantwin-ai-v0.1.0-demo.mp4
+- Asset ID: 518239225
+- Size: 17413505 bytes
+- GitHub state: uploaded
+- GitHub digest: sha256:0e82d5d78d9328aee2acafab90e98139ada7d948c68323baf6843694c7699c22
+- Expected local SHA-256: 0e82d5d78d9328aee2acafab90e98139ada7d948c68323baf6843694c7699c22
+- Independent download SHA-256: 0e82d5d78d9328aee2acafab90e98139ada7d948c68323baf6843694c7699c22
+
+3. DELIVERY_MANIFEST.md
+- Asset ID: 518239226
+- Size: 1762 bytes
+- GitHub state: uploaded
+- GitHub digest: sha256:b4233623028e347ea2f10da82be313069f8c1b1bab6d041b5b637329d291c59d
+- Independent download SHA-256: b4233623028e347ea2f10da82be313069f8c1b1bab6d041b5b637329d291c59d
+
+4. SHA256SUMS.txt
+- Asset ID: 518239228
+- Size: 977 bytes
+- GitHub state: uploaded
+- GitHub digest: sha256:6eb1090ffd105a1ed1ed2c5ae547175a4df0d1cabe07969790da2e6b3432456b
+- Independent download SHA-256: 6eb1090ffd105a1ed1ed2c5ae547175a4df0d1cabe07969790da2e6b3432456b
+
+Local-only final delivery assets:
+- humantwin-ai-v0.1.0-demo-backup.mp4
+- Seven PNG screenshots under artifacts/final/screenshots/
+
+Upload exclusions match the approved Task 3 contract.
+
+Verification observation:
+- The first batch download returned an unexpected EOF for the APK and produced a partial local verification copy.
+- A fresh direct Release-asset download returned the full 53670643-byte APK, the expected SHA-256, and a valid APK archive.
+- Classification: non-blocking Task 3 P2 verification-helper/network observation; published asset integrity PASS.
+
+Result: PASS

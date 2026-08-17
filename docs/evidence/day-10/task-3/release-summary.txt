@@ -1,0 +1,28 @@
+HumanTwin AI — Day 10 Task 3 Release Summary
+
+Release:
+- Repository: HumanTwinAI-123/HumanTwin-AI
+- Tag: v0.1.0
+- Tag type: annotated
+- Tag object: 365622dfa0015c31b010b835a1dd8906aa8bd32c
+- Tag annotation: HumanTwin AI v0.1.0 Final Demo Release
+- Peeled release target: fb330fe0e698372d2fd34c1ad38b7c91401f471b
+- Remote tag verification: PASS
+- Release title: HumanTwin AI v0.1.0 — Final Demo Release
+- Release ID: 371808808
+- Release URL: https://github.com/HumanTwinAI-123/HumanTwin-AI/releases/tag/v0.1.0
+- Published at: 2026-08-17T16:09:56Z / 2026-08-18T00:09:56+08:00
+- Draft: NO
+- Prerelease: NO
+- Duplicate release: NO
+
+Verified release boundary:
+- Android-first Flutter frontend Demo
+- Six-screen end-to-end experience
+- Mock AI generation pipeline
+- Pre-generated Local GLB
+- No production backend or cloud AI reconstruction service
+
+Result: PASS
+DAY 10 TASK 3 — PASS
+v0.1.0 — RELEASED
