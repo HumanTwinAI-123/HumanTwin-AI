@@ -1,0 +1,35 @@
+HumanTwin AI — Day 10 Task 2 Delivery Package Check
+
+Required files:
+- Final APK exists: PASS
+- Primary video exists: PASS
+- Backup video exists: PASS
+- Seven screenshots exist: PASS
+- DELIVERY_MANIFEST.md exists: PASS
+- SHA256SUMS.txt exists: PASS
+
+Integrity:
+- All required files are non-zero: PASS
+- PNG dimensions/readability: PASS; 1080x2400 each
+- MP4 container/codec/frame-read verification: PASS
+- Persistent black interval in primary video: 0
+- Persistent black interval in backup video: 0
+- Delivery APK SHA equals verified Task 1 APK SHA: PASS
+- Naming and directory structure: PASS
+- Temporary/rejected recordings in delivery directory: 0
+
+Repository policy:
+- Large delivery APK committed to main: NO
+- Large MP4 recordings committed to main: NO
+- Git LFS added: NO
+- Lightweight manifest, hashes, screenshots, and evidence are eligible for Git
+
+Scope audit:
+- lib/: unchanged
+- android/: unchanged
+- test/: unchanged
+- assets/: unchanged
+- pubspec.yaml: unchanged
+- pubspec.lock: unchanged
+
+Result: PASS

@@ -1,0 +1,10 @@
+308cb08bd8334caf0021a7c2d432483dc5fb3c9d25b06013c30d9e280d787614  artifacts/final/HumanTwin-AI-v0.1.0.apk
+0e82d5d78d9328aee2acafab90e98139ada7d948c68323baf6843694c7699c22  artifacts/final/humantwin-ai-v0.1.0-demo.mp4
+6cf6211dfa215691d4a09b091d7b3223d37830682c6f452bcffa0eee11ca7a21  artifacts/final/humantwin-ai-v0.1.0-demo-backup.mp4
+4c25e13c84b8562627a705d515a90c84494db2ccb38274afa39d025c3d20f2a2  artifacts/final/screenshots/01-home.png
+d05c70d4f0484db332e7e3bb0ef21452616173e1a19e8f51719a248c7f3ca254  artifacts/final/screenshots/02-photo-guide.png
+7b71c98adbf9112810141484fd092a8df724d80e0773fe910c463af65487b68e  artifacts/final/screenshots/03-photo-selection.png
+961efc7608da4e036aeed59895d23819a6eedffcf66ca7dc91476aae69d2ad5b  artifacts/final/screenshots/04-photo-confirmation.png
+95782dc093f087e8c21349d3a6ab05e771aea07427c515d0e1d3096eeb61a967  artifacts/final/screenshots/05-ai-processing.png
+e04e3014631dbe00637466b0d7d5eb4709da86e2e7d33cc5a177306401ab1b62  artifacts/final/screenshots/06-3d-viewer.png
+f05ab5fb5656f1836a92aaf297bd40e315169bcfe7bce574971e66c243a4b56a  artifacts/final/screenshots/07-viewer-interaction.png

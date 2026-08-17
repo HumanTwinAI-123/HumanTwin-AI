@@ -1,0 +1,31 @@
+HumanTwin AI — Day 10 Task 2 Media Manifest
+
+Primary Demo
+- artifacts/final/humantwin-ai-v0.1.0-demo.mp4
+- 134.641633 seconds
+- 17413505 bytes
+- 1080x2400 H.264
+- SHA-256: 0e82d5d78d9328aee2acafab90e98139ada7d948c68323baf6843694c7699c22
+- Playback verified: YES
+
+Backup Demo
+- artifacts/final/humantwin-ai-v0.1.0-demo-backup.mp4
+- 49.468022 seconds
+- 8779397 bytes
+- 1080x2400 H.264
+- SHA-256: 6cf6211dfa215691d4a09b091d7b3223d37830682c6f452bcffa0eee11ca7a21
+- Playback verified: YES
+
+Screenshots
+- 01-home.png | 1080x2400 | 761118 bytes | readable YES
+- 02-photo-guide.png | 1080x2400 | 373857 bytes | readable YES
+- 03-photo-selection.png | 1080x2400 | 475342 bytes | readable YES
+- 04-photo-confirmation.png | 1080x2400 | 467417 bytes | readable YES
+- 05-ai-processing.png | 1080x2400 | 401318 bytes | readable YES
+- 06-3d-viewer.png | 1080x2400 | 130276 bytes | readable YES
+- 07-viewer-interaction.png | 1080x2400 | 126951 bytes | readable YES
+
+Media source
+- Final verified Release APK
+- Physical Android d59cd208 / 23049RAD8C / Android 15 API 35
+- Safe HumanTwin sample images only; no personal photo is included in final media
