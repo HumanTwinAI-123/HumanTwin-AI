@@ -1,0 +1,35 @@
+Execution log window: 2026-08-17 22:52:42–23:01:12 +08:00
+Window setup: logcat cleared immediately before cold launch of the newly installed Release APK
+Main package: com.example.human_twin_ai
+Main App PID: 31234
+
+Targeted audit results:
+- Main-process start count: 1
+- Main PID at end: 31234
+- ANR: 0
+- FATAL EXCEPTION: 0
+- FlutterError: 0
+- OutOfMemory: 0
+- am_proc_died for main package: 0
+- crash detected: 0
+- renderer code -1: 0
+- Persistent white screen: 0 observed
+- Unexpected process restart: 0
+- Viewer unavailable after re-entry: NO
+
+Chromium / WebView classification:
+- WebView loaded normally and the Local GLB remained interactive.
+- Non-fatal Chromium warnings included DNS config, optional runtime-feature, cookie-manager and Viz messages.
+- No Chromium isolated renderer crash or code -1 event was present in this Task 1 window.
+
+P2 observation classes:
+1. Release build emitted non-blocking dependency-availability, Gradle native-access, SDK XML compatibility and icon-font warnings. Build, install and runtime smoke all passed.
+2. WebView emitted non-fatal Chromium warnings. Viewer load, interaction, reload and re-entry passed with a stable main PID.
+3. Two local verification helpers needed safe fallbacks: apkanalyzer could not locate build-tools and raw low-level two-touch injection was denied by device permissions. aapt plus installed pkgFlags verified non-debuggable status, and Viewer zoom was visibly verified through supported Android input scrolling. No app change was made.
+
+Severity:
+- P0: 0
+- P1: 0
+- P2: 3 non-blocking observation classes
+
+Log sanity conclusion: PASS

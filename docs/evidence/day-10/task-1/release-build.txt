@@ -1,0 +1,27 @@
+Execution date: 2026-08-17 +08:00
+
+Command: flutter build apk --release
+Result: PASS
+Observed: Built build/app/outputs/flutter-apk/app-release.apk (53.7MB)
+
+APK path: build/app/outputs/flutter-apk/app-release.apk
+Absolute path: /Users/georisklab02/Documents/ChatGPT/HumanTwin AI/build/app/outputs/flutter-apk/app-release.apk
+File size: 53670643 bytes
+Readable: YES
+
+Manifest / installed-package checks:
+- Package: com.example.human_twin_ai
+- versionName: 0.1.0
+- versionCode: 1
+- minSdkVersion: 24
+- targetSdkVersion: 36
+- android:debuggable attribute: absent
+- Installed pkgFlags: HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP
+- DEBUGGABLE flag: absent
+- Non-debuggable Release: PASS
+
+Install command target: d59cd208
+Install result: Success
+Launch result: PASS
+
+Non-blocking build warnings are classified as P2 and recorded in log-sanity.txt.

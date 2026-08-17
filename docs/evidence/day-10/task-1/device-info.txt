@@ -1,0 +1,12 @@
+Execution date: 2026-08-17 +08:00
+
+adb devices -l:
+d59cd208 device usb:1048576X product:marble model:23049RAD8C device:marble transport_id:3
+
+Device ID: d59cd208
+Model: 23049RAD8C
+Product device: marble
+Android release: 15
+Android API: 35
+Verification target: physical Android device
+Preflight: PASS

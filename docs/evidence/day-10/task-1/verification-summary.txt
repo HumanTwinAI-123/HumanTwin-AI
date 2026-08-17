@@ -1,0 +1,65 @@
+Project: HumanTwin AI
+Project Day: Day 10
+Execution date/time: 2026-08-17 22:52:42–23:01:12 +08:00 (Asia/Shanghai)
+Task: Final Release Verification
+
+Starting baseline: 01bec703551a7085ab6528375eab9de890389a9e
+Branch: main
+Starting origin/main: 01bec703551a7085ab6528375eab9de890389a9e
+Working tree preflight: clean
+
+Device: d59cd208
+Model: 23049RAD8C
+Android: 15 / API 35
+Target: physical Android device; no emulator substitution
+
+Automated:
+- flutter analyze --no-pub: PASS; 0 issues
+- flutter test --no-pub: PASS; 46 / 46
+- git diff --check before evidence: PASS
+
+Release APK:
+- Build: PASS; flutter build apk --release
+- Path: build/app/outputs/flutter-apk/app-release.apk
+- Size: 53670643 bytes
+- SHA-256: 308cb08bd8334caf0021a7c2d432483dc5fb3c9d25b06013c30d9e280d787614
+- Install status: PASS on d59cd208
+- Package: com.example.human_twin_ai
+- Version: 0.1.0 (versionCode 1)
+- Non-debuggable status: PASS; release manifest has no android:debuggable flag and installed pkgFlags do not contain DEBUGGABLE
+
+Physical Smoke:
+- Home: PASS
+- Photo Guide: PASS
+- Photo Selection: PASS; front / side / back selected from the physical device Gallery and mapped correctly
+- Photo Confirmation: PASS; all three mappings correct and system Back retained all three selections
+- AI Processing: PASS; Mock Processing reached one success state with no double navigation or unexpected regeneration
+- 3D Viewer: PASS; poster/loading, Local GLB, rotate, zoom, autoRotate, reload, UI Back and Android system Back verified
+- Viewer re-entry: PASS; one re-entry only, Local GLB available, PID stable
+
+Logs:
+- Log window: cleared before cold launch; audit covers this Task 1 smoke only
+- Main App PID: 31234 at launch, Viewer, re-entry and final return
+- Main process start count in window: 1
+- ANR: 0
+- FATAL EXCEPTION: 0
+- FlutterError: 0
+- OutOfMemory: 0
+- Persistent white screen: 0 observed
+- Unexpected process restart: 0
+- Viewer unavailable after re-entry: NO
+- Renderer crash / code -1: 0 observed
+
+Severity:
+- P0: 0
+- P1: 0
+- P2: 3 non-blocking tooling/log observation classes; documented in log-sanity.txt
+
+Conclusion: PASS
+DAY 10 TASK 1 — PASS
+FINAL RELEASE VERIFICATION — PASS
+FINAL RELEASE APK VERIFIED — YES
+TASK 2 — NOT STARTED
+TASK 3 — NOT STARTED
+v0.1.0 — NOT RELEASED
+GitHub Release — NOT CREATED

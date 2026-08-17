@@ -1,0 +1,44 @@
+Execution window: 2026-08-17 22:52:42–23:01:12 +08:00
+Device: d59cd208 / 23049RAD8C / Android 15 / API 35
+APK: newly built non-debuggable Release APK
+Method: ADB-driven interaction and visual/semantic inspection on the physical device
+
+One final primary demo path:
+1. Home: PASS
+   - HumanTwin AI brand and Home Hero v2 rendered normally.
+   - Image resources loaded; no visible crop defect, white block or debug overlay.
+   - CTA navigated normally.
+2. Photo Guide: PASS
+   - Page content and CTA rendered and navigated normally.
+3. Photo Selection: PASS
+   - Gallery front.png assigned to FRONT.
+   - Gallery side.png assigned to SIDE.
+   - Gallery back.png assigned to BACK.
+   - All three slot previews matched their directions.
+   - Completeness enabled the Next CTA.
+   - Cancel / Replace / Remove stress regression was intentionally not repeated.
+4. Photo Confirmation: PASS
+   - FRONT / SIDE / BACK mappings remained correct.
+   - Android system Back returned to Selection.
+   - All three photo values and the enabled Next CTA were retained.
+5. AI Processing: PASS
+   - Mock Processing state appeared and advanced to one Success state.
+   - No double navigation or unexpected regeneration was observed.
+   - This is a Mock AI pipeline, not real reconstruction.
+6. 3D Viewer: PASS
+   - Poster/loading transition completed and pre-generated Local GLB loaded.
+   - One-finger drag visibly changed model orientation.
+   - Zoom-in and zoom-out visibly changed camera framing on the physical device.
+   - AutoRotate visibly changed model orientation during a four-second no-input observation.
+   - Reload restored the model and default framing.
+   - UI Back returned to Processing Success.
+   - One Viewer re-entry loaded the model successfully.
+   - Android system Back returned to Processing Success.
+
+Viewer re-entry: 1 / 1 PASS
+Large Day 9 stress suites: not repeated, as required
+Main App PID at launch / Viewer / re-entry / final: 31234 / 31234 / 31234 / 31234
+Persistent white screen: 0 observed
+Unexpected main-process restart: 0
+
+Final physical smoke: PASS
