@@ -1,8 +1,10 @@
 # HumanTwin AI
 
-HumanTwin AI 是一个 Flutter Android-first AI 数字人体前端体验 Demo，用于验证完整、可信且可演示的移动端产品流程。
+HumanTwin AI 是一个面向中文用户的 Android-first AI 数字人体移动端前端 Demo，用于验证从三视图照片采集到数字人体查看的完整产品体验。
 
-## 核心流程
+当前正式版本：**[v0.1.0 Final Demo Release](https://github.com/HumanTwinAI-123/HumanTwin-AI/releases/tag/v0.1.0)**
+
+## Core Experience
 
 ```text
 Home
@@ -10,50 +12,74 @@ Home
 → Photo Selection
 → Photo Confirmation
 → Mock AI Processing
-→ 3D Viewer
+→ 3D Digital Human Viewer
 ```
 
-## 当前边界
+## Current Demo
 
-- 三视图照片选择、Camera / Gallery 与跨页面照片状态是真实 Flutter 功能。
-- AI Processing 使用 Mock Repository，不执行真实 AI 人体重建。
-- 3D Viewer 展示预生成的 Local GLB，支持旋转、缩放、自动旋转和重新加载。
-- 当前没有真实 backend API、照片上传或云存储。
-- Demo 的目标是验证从照片采集到数字人体查看的完整移动端产品体验。
+当前已经真实实现：
 
-## 技术栈
+- Flutter Android 前端与六屏完整产品流程
+- Camera / Gallery 图片选择
+- Front / Side / Back 三视图状态管理
+- 图片替换、删除与确认
+- Mock AI Processing 状态流程
+- 预生成 Local GLB 3D Viewer
+- Rotate / zoom / autoRotate / reload
+- Android 真机完整 E2E 验证
+- Android Release APK
 
-- Flutter 3.44.9 / Dart 3.12.2
-- Material 3
-- Riverpod
-- `go_router`
-- `image_picker` / `XFile`
-- `model_viewer_plus`
-- Local GLB
-- Mock Repository
+## Demo Boundary
 
-## 当前完成状态
+- AI Processing 当前为 **Mock AI generation pipeline**。
+- 3D Viewer 当前展示预生成的 **Local GLB**。
+- 用户选择的 Front / Side / Back 三张照片当前不会真实生成 Viewer 中展示的 GLB。
+- 当前没有 production backend、cloud upload、real AI reconstruction 或 cloud storage。
+- 当前不包含 Login、Profile、History、Medical Analysis、AR、Payments 等产品能力。
+- 本项目仅是 Android-first 前端 Demo，不代表生产系统或医疗级产品。
 
-- Six-screen flow complete
-- Physical Android verified
-- Release APK validated
-- Home Hero v2 approved on Day 9
-- Release Candidate ready for Day 10 final delivery
-
-## 稳定性摘要
+## Verification
 
 - `flutter analyze --no-pub`：0 issues
-- `flutter test --no-pub`：46/46 PASS
-- Physical Android E2E：PASS
-- Viewer re-entry：5/5 PASS
-- Viewer rapid exit：10/10 PASS
-- Full demo loop：3/3 PASS
+- `flutter test --no-pub`：46 / 46 PASS
+- Physical Android：Xiaomi `23049RAD8C`，Android 15 / API 35
+- Final Release Smoke：PASS
+- Viewer re-entry：5 / 5 PASS
+- Viewer rapid exit：10 / 10 PASS
+- Full Demo loop：3 / 3 PASS
 - P0：0
 - P1：0
 
-完整验证证据见 [Day 9 Evidence Index](docs/evidence/day-9/README.md)。项目限制见 [Known Limitations](docs/KNOWN_LIMITATIONS.md)，正式演示流程见 [Demo Script](docs/DEMO_SCRIPT.md)。
+验证证据见 [Day 10 Evidence Index](docs/evidence/day-10/README.md)。
 
-## 本地运行与验证
+## Release
+
+正式版本：**v0.1.0**
+
+[HumanTwin AI v0.1.0 — Final Demo Release](https://github.com/HumanTwinAI-123/HumanTwin-AI/releases/tag/v0.1.0) 包含：
+
+- Android Release APK
+- Final Demo Video
+- Delivery Manifest
+- SHA256SUMS
+
+## Design
+
+- [Figma — HumanTwin AI / Approved Home Hero v2](https://www.figma.com/design/JN4IsUqG7tLuwqcGbjbd1k/HumanTwin-AI?node-id=274-15)
+
+## Project Records
+
+- [Notion — HumanTwin AI Day 10 Final Delivery](https://app.notion.com/p/3bf38defc2eb8139a6f5dd935fef86e1?pvs=204)
+
+## Known Limitations
+
+完整能力边界与已知限制见 [docs/KNOWN_LIMITATIONS.md](docs/KNOWN_LIMITATIONS.md)。
+
+## Demo Script
+
+正式演示流程见 [docs/DEMO_SCRIPT.md](docs/DEMO_SCRIPT.md)。
+
+## Local Run
 
 ```bash
 flutter pub get
@@ -76,6 +102,16 @@ Flutter UI
 ```
 
 未来接入真实 AI API 时，目标是替换 Repository 实现，同时保持现有六屏产品流程与照片状态所有权不变。
+
+## Next Stage
+
+以下方向属于后续研究与产品验证，不属于当前 v0.1.0 正式交付：
+
+- Higher-quality digital human GLB asset
+- Visually aligned Front / Side / Back Demo Case
+- Real AI reconstruction research / integration
+- Backend API integration
+- Further product and user validation
 
 ## Third-party Notice
 
