@@ -1,0 +1,58 @@
+HumanTwin AI v0.1.1 Candidate — Verification Summary
+Recorded: 2026-08-18 18:43:57 +0800
+
+RELEASE BOUNDARY
+- v0.1.1: CANDIDATE ONLY
+- v0.1.0: UNCHANGED
+- v0.1.0 target: fb330fe0e698372d2fd34c1ad38b7c91401f471b
+- Starting main: 2ab89a2011e91a761ed90b3c1e5560910a45bbd8
+- Feature branch: polish/v0.1.1-ui-viewer
+- main: NOT MERGED / UNCHANGED
+- v0.1.1: NOT RELEASED
+
+IMPLEMENTED LOW-RISK POLISH
+- Photo Selection selected-photo previews use BoxFit.contain.
+- Photo Confirmation previews use BoxFit.contain.
+- Photo Confirmation Modify is a secondary ice-blue outlined action, not a green success action.
+- Processing displays DEMO · MOCK PROCESSING.
+- Processing reuses the existing front scan-suit Demo Case asset.
+
+VIEWER ASSET GATE
+- Approved replacement GLB available: NO
+- Result: VIEWER ASSET GATE — BLOCKED / APPROVED GLB REQUIRED
+- Current asset: assets/models/human_demo.glb
+- Current size: 50116 bytes
+- Git blob: c505a33dfa5ba84bd5f3dd0a85f74ee4c9978322
+- Difference from v0.1.0: NONE
+- Viewer lifecycle or architecture changed: NO
+
+AUTOMATED VERIFICATION
+- flutter analyze --no-pub: PASS — 0 issues
+- flutter test --no-pub: PASS — 49 / 49
+- git diff --check: PASS
+- flutter build apk --release --no-pub: PASS
+- Release APK: build/app/outputs/flutter-apk/app-release.apk
+- APK size: 53670723 bytes
+- APK SHA-256: 734b37efb9c32b58ac0dfe6e8a174b0e5f23fb64fe874d6f7db26e8c3bd5e96e
+- Gradle/SDK/font messages: non-blocking build warnings; APK produced successfully
+
+RESPONSIVE WIDGET QA
+- 390 × 844: PASS for affected Selection, Confirmation, and Processing flows
+- 360 × 800: PASS in three explicit new regression tests
+- 200% text scale: PASS at 360 × 650 in the existing stronger short-screen tests
+- RenderFlex overflow / uncaught widget exception: 0 in the completed checks
+
+PHYSICAL ANDROID
+- Required device: d59cd208 / 23049RAD8C / Android 15 API 35
+- adb devices -l: no connected devices
+- Install: NOT RUN / BLOCKED
+- Full physical E2E: NOT RUN / BLOCKED
+- Physical screenshots: NOT CAPTURED / BLOCKED
+- Physical log sanity: NOT RUN / BLOCKED
+
+SEVERITY / CANDIDATE STATUS
+- P0 observed in completed checks: 0
+- New P1 observed in completed checks: 0
+- Viewer visual P1: BLOCKED pending an approved replacement GLB
+- Low-risk UI polish: IMPLEMENTED and automated checks PASS
+- Final candidate result: BLOCKED pending physical Android E2E and approved Viewer GLB

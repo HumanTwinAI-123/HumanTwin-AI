@@ -243,7 +243,8 @@ class _DigitalHumanVisual extends StatelessWidget {
                 top: 32,
                 bottom: 27,
                 child: Image.asset(
-                  'assets/images/digital_human_hero.png',
+                  'assets/images/photo_guide_scan_suit_front.png',
+                  key: const ValueKey<String>('processing-demo-case-image'),
                   fit: BoxFit.contain,
                   filterQuality: FilterQuality.high,
                 ),
@@ -252,7 +253,7 @@ class _DigitalHumanVisual extends StatelessWidget {
                 left: 16,
                 top: 16,
                 child: Text(
-                  'AI PROCESSING · DIGITAL TWIN',
+                  'DEMO · MOCK PROCESSING',
                   textScaler: TextScaler.noScaling,
                   style: TextStyle(
                     color: signalColor,

@@ -1,0 +1,48 @@
+HumanTwin AI v0.1.1 Candidate — Visual QA
+Recorded: 2026-08-18 +0800
+
+DEMO CASE CONSISTENCY
+- Three-view case: existing male dark graphite scan-suit Front / Side / Back assets
+- Processing visual: aligned to the same existing male Front asset
+- Viewer model: unchanged low-poly local GLB
+- Overall alignment: PARTIAL
+- Product boundary: selected photos do not generate the Local GLB
+
+FIGMA CANDIDATE
+- File key: JN4IsUqG7tLuwqcGbjbd1k
+- Section: v0.1.1 Polish Candidate
+- Section node: 305:196
+- Selection candidate: 305:209
+- Confirmation candidate: 305:291
+- Processing candidate: 305:373
+- Status: CANDIDATE · v0.1.1
+- Selection full-body FIT previews: PASS
+- Confirmation full-body FIT previews: PASS
+- Confirmation secondary outlined Modify actions: PASS
+- Processing DEMO · MOCK PROCESSING label: PASS
+- Processing same-case male scan-suit visual: PASS
+- Candidate typography: Noto Sans SC + Roboto Mono; unexpected families: 0
+- Placeholder/shimmer left behind: NO
+
+PROTECTED FIGMA STATE
+- Formal Photo Selection 162:18: unchanged
+- Formal Photo Confirmation 162:23: unchanged
+- Formal AI Processing 162:28: unchanged
+- Day 9 Home 274:15: preserved
+- Day 8 Frozen Home 284:185: preserved
+- Formal annotations remain APPROVED · DAY 4 / DAY 5 / DAY 6
+- Viewer candidate: NOT CREATED because the approved GLB gate is blocked
+
+APPLICATION VISUAL EVIDENCE
+- Physical Selection screenshot: BLOCKED — device unavailable
+- Physical Confirmation screenshot: BLOCKED — device unavailable
+- Physical Processing screenshot: BLOCKED — device unavailable
+- Physical Viewer screenshot: BLOCKED — device unavailable
+- Old v0.1.0 screenshots were not relabeled as new v0.1.1 physical evidence
+
+VISUAL ACCEPTANCE STATUS
+- Selection: PASS in Figma candidate and responsive widget tests
+- Confirmation: PASS in Figma candidate and responsive widget tests
+- Processing: PASS in Figma candidate and responsive widget tests
+- Viewer asset: UNCHANGED / BLOCKED
+- Physical visual acceptance: BLOCKED

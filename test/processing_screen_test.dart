@@ -36,6 +36,14 @@ void main() {
       );
       expect(find.text('正在构建你的数字人体'), findsOneWidget);
       expect(find.text('AI 生成中'), findsWidgets);
+      expect(find.text('DEMO · MOCK PROCESSING'), findsOneWidget);
+      final Image demoCaseImage = tester.widget<Image>(
+        find.byKey(const ValueKey<String>('processing-demo-case-image')),
+      );
+      expect(
+        (demoCaseImage.image as AssetImage).assetName,
+        'assets/images/photo_guide_scan_suit_front.png',
+      );
       expect(
         find.byKey(const ValueKey<String>('processing-view-twin-cta')),
         findsNothing,
@@ -243,6 +251,29 @@ void main() {
           )
           .dy,
       lessThanOrEqualTo(650),
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Processing mock label fits at 360 by 800', (
+    WidgetTester tester,
+  ) async {
+    _configureView(tester, const Size(360, 800));
+    final _ProcessingTestApp app = await _pumpApp(
+      tester,
+      repository: _ControlledRepository(
+        completions: <Future<void>>[Future<void>.value()],
+      ),
+      photoState: _completePhotos(),
+    );
+
+    app.router.go('/processing');
+    await tester.pumpAndSettle();
+
+    expect(find.text('DEMO · MOCK PROCESSING'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('processing-demo-case-image')),
+      findsOneWidget,
     );
     expect(tester.takeException(), isNull);
   });

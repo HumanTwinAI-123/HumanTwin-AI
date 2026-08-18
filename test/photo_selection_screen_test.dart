@@ -79,6 +79,17 @@ void main() {
       await _pickFrom(tester, PhotoAngle.side, action: 'camera');
       await _pickFrom(tester, PhotoAngle.back, action: 'gallery');
 
+      for (final XFile image in <XFile>[front, side, back]) {
+        expect(
+          tester
+              .widget<Image>(
+                find.byKey(ValueKey<String>('photo-slot-image-${image.path}')),
+              )
+              .fit,
+          BoxFit.contain,
+        );
+      }
+
       state = testApp.container.read(photoFlowControllerProvider);
       expect(state.front, same(front));
       expect(state.side, same(side));
@@ -246,6 +257,36 @@ void main() {
           .dy,
       lessThanOrEqualTo(650),
     );
+  });
+
+  testWidgets('filled Photo Selection remains usable at 360 by 800', (
+    WidgetTester tester,
+  ) async {
+    _configureView(tester, const Size(360, 800));
+    final FakeImagePicker picker = FakeImagePicker(
+      pickResults: <Object?>[
+        _testImage('front-360.png'),
+        _testImage('side-360.png'),
+        _testImage('back-360.png'),
+      ],
+    );
+    await _pumpTestApp(tester, picker);
+    await _openSelection(tester);
+
+    for (final PhotoAngle angle in PhotoAngle.values) {
+      await _pickFrom(tester, angle, action: 'gallery');
+    }
+
+    expect(find.byType(PhotoSlot), findsNWidgets(3));
+    expect(
+      tester
+          .widget<PrimaryButton>(
+            find.byKey(const ValueKey<String>('photo-selection-cta')),
+          )
+          .onPressed,
+      isNotNull,
+    );
+    expect(tester.takeException(), isNull);
   });
 }
 

@@ -53,6 +53,31 @@ void main() {
       _expectCardMapping(PhotoAngle.front, 'FRONT');
       _expectCardMapping(PhotoAngle.side, 'SIDE');
       _expectCardMapping(PhotoAngle.back, 'BACK');
+      for (final PhotoAngle angle in PhotoAngle.values) {
+        expect(
+          tester
+              .widget<Image>(
+                find.byKey(
+                  _imageKey(angle, switch (angle) {
+                    PhotoAngle.front => front,
+                    PhotoAngle.side => side,
+                    PhotoAngle.back => back,
+                  }),
+                ),
+              )
+              .fit,
+          BoxFit.contain,
+        );
+        expect(
+          tester.widget<OutlinedButton>(
+            find.byKey(
+              ValueKey<String>('photo-confirmation-edit-${angle.name}'),
+            ),
+          ),
+          isA<OutlinedButton>(),
+        );
+      }
+      expect(find.byIcon(Icons.edit_outlined), findsNWidgets(3));
 
       PhotoFlowState state = app.container.read(photoFlowControllerProvider);
       expect(state.front, same(front));
@@ -233,6 +258,32 @@ void main() {
       find.byKey(const ValueKey<String>('photo-confirmation-card-back')),
       findsOneWidget,
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Confirmation modify actions fit at 360 by 800', (
+    WidgetTester tester,
+  ) async {
+    _configureView(tester, const Size(360, 800));
+    final FakeConfirmationImagePicker picker = FakeConfirmationImagePicker(
+      pickResults: <XFile>[
+        _testImage('front-360.png'),
+        _testImage('side-360.png'),
+        _testImage('back-360.png'),
+      ],
+    );
+    final _ConfirmationTestApp app = await _pumpConfirmationApp(tester, picker);
+    final PhotoFlowController controller = app.container.read(
+      photoFlowControllerProvider.notifier,
+    );
+    for (final PhotoAngle angle in PhotoAngle.values) {
+      await controller.select(angle, source: ImageSource.gallery);
+    }
+    app.router.go('/photo-confirmation');
+    await tester.pumpAndSettle();
+
+    expect(find.byType(OutlinedButton), findsNWidgets(3));
+    expect(find.byIcon(Icons.edit_outlined), findsNWidgets(3));
     expect(tester.takeException(), isNull);
   });
 }

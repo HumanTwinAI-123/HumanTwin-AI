@@ -243,7 +243,7 @@ class _ConfirmationPhotoCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    '$englishLabel\n已添加 · 修改',
+                    '$englishLabel\n已添加',
                     textScaler: TextScaler.noScaling,
                     style: const TextStyle(
                       color: AppColors.textSecondary,
@@ -259,25 +259,39 @@ class _ConfirmationPhotoCard extends StatelessWidget {
             Semantics(
               button: true,
               label: '修改$label',
-              child: IconButton(
-                key: ValueKey<String>('photo-confirmation-edit-${angle.name}'),
-                tooltip: '修改$label',
-                onPressed: () => _returnToSelection(context),
-                style: IconButton.styleFrom(
-                  backgroundColor: AppColors.success,
-                  foregroundColor: AppColors.background,
-                  minimumSize: const Size.square(38),
-                  maximumSize: const Size.square(38),
-                  padding: EdgeInsets.zero,
-                  shape: const CircleBorder(),
-                ),
-                icon: const Text(
-                  '改',
-                  textScaler: TextScaler.noScaling,
-                  style: TextStyle(
-                    fontSize: 11,
-                    height: 16 / 11,
-                    fontWeight: FontWeight.w500,
+              child: Tooltip(
+                message: '修改$label',
+                child: OutlinedButton(
+                  key: ValueKey<String>(
+                    'photo-confirmation-edit-${angle.name}',
+                  ),
+                  onPressed: () => _returnToSelection(context),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.accentPrimary,
+                    minimumSize: const Size(64, 38),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    side: BorderSide(
+                      color: AppColors.accentPrimary.withValues(alpha: 0.55),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(AppRadii.small),
+                    ),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Icon(Icons.edit_outlined, size: 14),
+                      SizedBox(width: 4),
+                      Text(
+                        '修改',
+                        textScaler: TextScaler.noScaling,
+                        style: TextStyle(
+                          fontSize: 11,
+                          height: 16 / 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -344,7 +358,7 @@ class _ConfirmationPhotoPreviewState extends State<_ConfirmationPhotoPreview> {
               ),
               width: double.infinity,
               height: double.infinity,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
               filterQuality: FilterQuality.medium,
               gaplessPlayback: true,
               cacheWidth: 512,

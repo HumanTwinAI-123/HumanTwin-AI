@@ -208,7 +208,7 @@ class _XFilePreviewState extends State<_XFilePreview> {
             key: ValueKey<String>('photo-slot-image-${widget.image.path}'),
             width: double.infinity,
             height: double.infinity,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
             filterQuality: FilterQuality.medium,
             gaplessPlayback: true,
             cacheWidth: 512,
