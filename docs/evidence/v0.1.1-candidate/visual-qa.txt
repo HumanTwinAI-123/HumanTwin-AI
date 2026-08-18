@@ -1,5 +1,6 @@
 HumanTwin AI v0.1.1 Candidate — Visual QA
 Recorded: 2026-08-18 +0800
+Physical update: 2026-08-18 19:00:00 +0800
 
 DEMO CASE CONSISTENCY
 - Three-view case: existing male dark graphite scan-suit Front / Side / Back assets
@@ -34,10 +35,13 @@ PROTECTED FIGMA STATE
 - Viewer candidate: NOT CREATED because the approved GLB gate is blocked
 
 APPLICATION VISUAL EVIDENCE
-- Physical Selection screenshot: BLOCKED — device unavailable
-- Physical Confirmation screenshot: BLOCKED — device unavailable
-- Physical Processing screenshot: BLOCKED — device unavailable
-- Physical Viewer screenshot: BLOCKED — device unavailable
+- Physical Selection screenshot: PASS — Front / Side / Back show complete heads and feet, preserve natural proportions, and show no visible overflow
+- Physical Confirmation screenshot: PASS — complete previews; ice-blue outlined Modify actions are distinct from green success states
+- Physical Modify behavior: PASS — returns to Photo Selection and retains all three selected photos
+- Physical Processing screenshot: PASS — DEMO · MOCK PROCESSING remains secondary to the main title and scan layout
+- Physical Processing success screenshot: PASS — success state appears normally and Viewer CTA is available
+- Physical Viewer screenshot: PASS for the unchanged old Local GLB; the low-poly model loads without a persistent white screen
+- Physical Viewer interactions: PASS — autoRotate, drag rotate, zoom, reload, and UI Back
 - Old v0.1.0 screenshots were not relabeled as new v0.1.1 physical evidence
 
 VISUAL ACCEPTANCE STATUS
@@ -45,4 +49,5 @@ VISUAL ACCEPTANCE STATUS
 - Confirmation: PASS in Figma candidate and responsive widget tests
 - Processing: PASS in Figma candidate and responsive widget tests
 - Viewer asset: UNCHANGED / BLOCKED
-- Physical visual acceptance: BLOCKED
+- Physical visual acceptance for current UI polish: PASS
+- Final v0.1.1 candidate: BLOCKED only by the approved Viewer GLB asset gate

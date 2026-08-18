@@ -1,5 +1,6 @@
 HumanTwin AI v0.1.1 Candidate — Verification Summary
 Recorded: 2026-08-18 18:43:57 +0800
+Physical update: 2026-08-18 19:00:00 +0800
 
 RELEASE BOUNDARY
 - v0.1.1: CANDIDATE ONLY
@@ -44,15 +45,21 @@ RESPONSIVE WIDGET QA
 
 PHYSICAL ANDROID
 - Required device: d59cd208 / 23049RAD8C / Android 15 API 35
-- adb devices -l: no connected devices
-- Install: NOT RUN / BLOCKED
-- Full physical E2E: NOT RUN / BLOCKED
-- Physical screenshots: NOT CAPTURED / BLOCKED
-- Physical log sanity: NOT RUN / BLOCKED
+- adb devices -l: PASS — d59cd208 / 23049RAD8C / device
+- Release APK install: PASS
+- Full physical E2E: PASS — Home → Photo Guide → Photo Selection → Photo Confirmation → Mock AI Processing → Viewer
+- Photo Selection: PASS — Front / Side / Back full-body previews use contain presentation with no visible stretch or overflow
+- Photo Confirmation: PASS — full-body previews complete; ice-blue outlined Modify is visually distinct from green success; Modify returns to Selection and preserves all three photos
+- Processing: PASS — DEMO · MOCK PROCESSING is visible without disrupting the title or layout; Processing → Success completes normally
+- Viewer: PASS with the unchanged assets/models/human_demo.glb — enter, autoRotate, drag rotate, zoom, reload, and UI Back all respond normally
+- Persistent white screen: 0 across accepted current-run screenshots
+- Main process PID: 23253 from cold launch through Viewer Back; unexpected main-process restart: 0
+- App-process log sanity: ANR 0 / FATAL EXCEPTION 0 / FlutterError 0
+- Full-buffer diagnostic note: one unrelated UiAutomation helper-process FATAL (PID 19802, Bad file descriptor) occurred while dumping accessibility trees; HumanTwin remained PID 23253 and functional
 
 SEVERITY / CANDIDATE STATUS
-- P0 observed in completed checks: 0
-- New P1 observed in completed checks: 0
+- P0 observed: 0
+- P1 observed in UI polish physical E2E: 0
 - Viewer visual P1: BLOCKED pending an approved replacement GLB
-- Low-risk UI polish: IMPLEMENTED and automated checks PASS
-- Final candidate result: BLOCKED pending physical Android E2E and approved Viewer GLB
+- Low-risk UI polish: IMPLEMENTED; automated checks and physical Android E2E PASS
+- Final candidate result: BLOCKED only by the approved Viewer GLB asset gate
