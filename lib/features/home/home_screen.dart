@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ColoredBox(
-        color: AppColors.background,
+        color: const Color(0xFF0D1117),
         child: SafeArea(
           child: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
@@ -62,11 +62,12 @@ class _HomeCanvas extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: RadialGradient(
                 colors: <Color>[
-                  Color(0x1F86D7FF),
-                  Color(0x0A2979FF),
-                  Color(0x00090D12),
+                  Color(0x2400E5FF),
+                  Color(0x122979FF),
+                  Color(0x0A7B61FF),
+                  Color(0x000D1117),
                 ],
-                stops: <double>[0, 0.54, 1],
+                stops: <double>[0, 0.38, 0.68, 1],
               ),
             ),
           ),
@@ -98,7 +99,7 @@ class _HomeCanvas extends StatelessWidget {
                   TextSpan(text: '创建你的\n'),
                   TextSpan(
                     text: '数字人体',
-                    style: TextStyle(color: AppColors.accentPrimary),
+                    style: TextStyle(color: Color(0xFF00E5FF)),
                   ),
                 ],
               ),
@@ -167,11 +168,11 @@ class _Brand extends StatelessWidget {
               Image.asset(
                 'assets/images/brand/humantwin_mark.png',
                 key: const ValueKey<String>('humantwin-brand-mark'),
-                width: 32,
-                height: 32,
+                width: 38,
+                height: 38,
                 filterQuality: FilterQuality.high,
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
               const Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -185,26 +186,26 @@ class _Brand extends StatelessWidget {
                         ),
                         TextSpan(
                           text: ' AI',
-                          style: TextStyle(color: AppColors.accentPrimary),
+                          style: TextStyle(color: Color(0xFF00E5FF)),
                         ),
                       ],
                     ),
                     style: TextStyle(
-                      fontSize: 17,
+                      fontSize: 18,
                       height: 1.05,
                       letterSpacing: -0.2,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                   SizedBox(height: 4),
                   Text(
                     'DIGITAL HUMAN · SMARTER LIFE',
                     style: TextStyle(
-                      color: AppColors.textTertiary,
+                      color: Color(0xFF6B7280),
                       fontFamily: 'monospace',
                       fontSize: 7,
                       height: 1,
-                      letterSpacing: 1.15,
+                      letterSpacing: 1.25,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -258,7 +259,7 @@ class _DemoBadge extends StatelessWidget {
       child: const Text(
         'DEMO',
         style: TextStyle(
-          color: AppColors.accentPrimary,
+          color: Color(0xFF00E5FF),
           fontFamily: 'monospace',
           fontSize: 10,
           height: 1.4,
