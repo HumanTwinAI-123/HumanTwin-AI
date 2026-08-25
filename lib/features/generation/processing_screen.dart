@@ -23,7 +23,7 @@ class _ProcessingScreenState extends ConsumerState<ProcessingScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && ref.read(photoFlowControllerProvider).isComplete) {
-        unawaited(ref.read(generationControllerProvider.notifier).start());
+        unawaited(ref.read(generationControllerProvider.notifier).restart());
       }
     });
   }

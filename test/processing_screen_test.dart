@@ -246,6 +246,96 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'Fresh Processing entry after success starts a new generation run',
+    (WidgetTester tester) async {
+      _configureView(tester, const Size(390, 844));
+      final Completer<void> firstRun = Completer<void>();
+      final Completer<void> secondRun = Completer<void>();
+      final _ControlledRepository repository = _ControlledRepository(
+        completions: <Future<void>>[firstRun.future, secondRun.future],
+      );
+      final _ProcessingTestApp app = await _pumpApp(
+        tester,
+        repository: repository,
+        photoState: _completePhotos(),
+      );
+
+      // First entry generates and completes to success.
+      app.router.go('/processing');
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('正在构建你的数字人体'), findsOneWidget);
+      expect(repository.callCount, 1);
+
+      firstRun.complete();
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('你的数字人体已生成'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey<String>('processing-view-twin-cta')),
+        findsOneWidget,
+      );
+
+      // Leave Processing for a fresh (asset-free) route, then re-enter so a
+      // brand new ProcessingScreen State is mounted.
+      app.router.go('/viewer');
+      await tester.pumpAndSettle();
+      app.router.go('/processing');
+      await tester.pump();
+      await tester.pump();
+
+      // The fresh entry must replay the processing animation, not the cached
+      // success, and must trigger a second generation run.
+      expect(find.text('正在构建你的数字人体'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey<String>('processing-view-twin-cta')),
+        findsNothing,
+      );
+      expect(repository.callCount, 2);
+
+      secondRun.complete();
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('你的数字人体已生成'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'Ordinary rebuild does not restart an in-flight generation run',
+    (WidgetTester tester) async {
+      _configureView(tester, const Size(390, 844));
+      final Completer<void> firstRun = Completer<void>();
+      final _ControlledRepository repository = _ControlledRepository(
+        completions: <Future<void>>[firstRun.future],
+      );
+      final _ProcessingTestApp app = await _pumpApp(
+        tester,
+        repository: repository,
+        photoState: _completePhotos(),
+      );
+
+      app.router.go('/processing');
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('正在构建你的数字人体'), findsOneWidget);
+      expect(repository.callCount, 1);
+
+      // Force ordinary rebuilds without remounting the route.
+      tester.view.physicalSize = const Size(389, 844);
+      await tester.pump();
+      tester.view.physicalSize = const Size(390, 844);
+      await tester.pump();
+
+      expect(repository.callCount, 1);
+
+      firstRun.complete();
+      await tester.pump();
+      await tester.pump();
+      expect(find.text('你的数字人体已生成'), findsOneWidget);
+    },
+  );
 }
 
 PhotoFlowState _completePhotos() {

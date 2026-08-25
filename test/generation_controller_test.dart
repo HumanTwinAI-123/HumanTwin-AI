@@ -151,6 +151,142 @@ void main() {
       expect(photos.back, isNull);
     },
   );
+
+  test('restart replays generation after a previous success', () async {
+    final Completer<void> firstRun = Completer<void>();
+    final Completer<void> secondRun = Completer<void>();
+    final _ControlledRepository repository = _ControlledRepository(
+      completions: <Future<void>>[firstRun.future, secondRun.future],
+    );
+    final ProviderContainer container = _container(
+      repository: repository,
+      photoState: PhotoFlowState(
+        front: XFile('/photos/front.jpg'),
+        side: XFile('/photos/side.jpg'),
+        back: XFile('/photos/back.jpg'),
+      ),
+    );
+    final GenerationController controller = container.read(
+      generationControllerProvider.notifier,
+    );
+
+    final Future<void> first = controller.start();
+    expect(
+      container.read(generationControllerProvider).status,
+      GenerationStatus.processing,
+    );
+    firstRun.complete();
+    await first;
+    expect(
+      container.read(generationControllerProvider).status,
+      GenerationStatus.success,
+    );
+    expect(repository.callCount, 1);
+
+    final Future<void> second = controller.restart();
+    expect(
+      container.read(generationControllerProvider).status,
+      GenerationStatus.processing,
+    );
+    expect(repository.callCount, 2);
+
+    secondRun.complete();
+    await second;
+    expect(
+      container.read(generationControllerProvider).status,
+      GenerationStatus.success,
+    );
+  });
+
+  test(
+    'a stale failing run does not overwrite a newer successful run',
+    () async {
+      final Completer<void> olderRun = Completer<void>();
+      final Completer<void> newerRun = Completer<void>();
+      final _ControlledRepository repository = _ControlledRepository(
+        completions: <Future<void>>[olderRun.future, newerRun.future],
+      );
+      final ProviderContainer container = _container(
+        repository: repository,
+        photoState: PhotoFlowState(
+          front: XFile('/photos/front.jpg'),
+          side: XFile('/photos/side.jpg'),
+          back: XFile('/photos/back.jpg'),
+        ),
+      );
+      final GenerationController controller = container.read(
+        generationControllerProvider.notifier,
+      );
+
+      final Future<void> older = controller.start();
+      final Future<void> newer = controller.restart();
+      expect(
+        container.read(generationControllerProvider).status,
+        GenerationStatus.processing,
+      );
+      expect(repository.callCount, 2);
+
+      // Newer run resolves first and wins.
+      newerRun.complete();
+      await newer;
+      expect(
+        container.read(generationControllerProvider).status,
+        GenerationStatus.success,
+      );
+
+      // Older run fails later and must be ignored.
+      olderRun.completeError(StateError('stale failure'));
+      await older;
+      final GenerationState result = container.read(
+        generationControllerProvider,
+      );
+      expect(result.status, GenerationStatus.success);
+      expect(result.errorMessage, isNull);
+    },
+  );
+
+  test(
+    'a stale successful run does not overwrite a newer failed run',
+    () async {
+      final Completer<void> olderRun = Completer<void>();
+      final Completer<void> newerRun = Completer<void>();
+      final _ControlledRepository repository = _ControlledRepository(
+        completions: <Future<void>>[olderRun.future, newerRun.future],
+      );
+      final ProviderContainer container = _container(
+        repository: repository,
+        photoState: PhotoFlowState(
+          front: XFile('/photos/front.jpg'),
+          side: XFile('/photos/side.jpg'),
+          back: XFile('/photos/back.jpg'),
+        ),
+      );
+      final GenerationController controller = container.read(
+        generationControllerProvider.notifier,
+      );
+
+      final Future<void> older = controller.start();
+      final Future<void> newer = controller.restart();
+      expect(repository.callCount, 2);
+
+      // Newer run fails first and wins.
+      newerRun.completeError(StateError('newer failure'));
+      await newer;
+      expect(
+        container.read(generationControllerProvider).status,
+        GenerationStatus.failure,
+      );
+
+      // Older run succeeds later and must be ignored.
+      olderRun.complete();
+      await older;
+      final GenerationState result = container.read(
+        generationControllerProvider,
+      );
+      expect(result.status, GenerationStatus.failure);
+      expect(result.errorMessage, '生成过程中出现问题，请重新尝试');
+    },
+  );
 }
 
 ProviderContainer _container({
