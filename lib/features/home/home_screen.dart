@@ -1,495 +1,379 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../app/theme/app_theme.dart';
-import '../../shared/widgets/primary_button.dart';
+import '../../shared/ui/ht_ui.dart';
+import '../capture/photo_flow_controller.dart';
+import '../library/generation_record.dart';
+import '../library/library_controller.dart';
+import '../library/record_widgets.dart';
+import '../onboarding/welcome_screen.dart';
+import '../settings/app_settings.dart';
 
-class HomeScreen extends StatelessWidget {
+/// Starts or continues creation: an existing draft goes straight to the photos.
+void startCreation(BuildContext context, WidgetRef ref) {
+  final bool hasDraft = !ref.read(photoFlowControllerProvider).isEmpty;
+  if (hasDraft || !ref.read(appSettingsProvider).showGuide) {
+    context.push('/create/photos');
+  } else {
+    context.push('/create/guide');
+  }
+}
+
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  static const Size designSize = Size(390, 844);
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final LibraryState library = ref.watch(libraryControllerProvider);
+    final PhotoFlowState draft = ref.watch(photoFlowControllerProvider);
+    final bool demo = ref.watch(generationModeProvider) == GenerationMode.mock;
+    final bool fresh = library.records.isEmpty && draft.isEmpty;
     return Scaffold(
-      body: ColoredBox(
-        color: const Color(0xFF0D1117),
-        child: SafeArea(
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              final double canvasWidth = constraints.maxWidth.clamp(
-                0,
-                designSize.width,
-              );
-              final double scale = canvasWidth / designSize.width;
-
-              return SingleChildScrollView(
-                child: Center(
-                  child: SizedBox(
-                    width: canvasWidth,
-                    height: designSize.height * scale,
-                    child: FittedBox(
-                      fit: BoxFit.fill,
-                      child: SizedBox.fromSize(
-                        size: designSize,
-                        child: const _HomeCanvas(),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _HomeCanvas extends StatelessWidget {
-  const _HomeCanvas();
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        const Positioned(
-          left: 46,
-          right: 46,
-          top: 152,
-          height: 470,
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                colors: <Color>[
-                  Color(0x2400E5FF),
-                  Color(0x122979FF),
-                  Color(0x0A7B61FF),
-                  Color(0x000D1117),
-                ],
-                stops: <double>[0, 0.38, 0.68, 1],
-              ),
-            ),
-          ),
-        ),
-        const Positioned.fill(
-          child: CustomPaint(painter: _SpatialGridPainter()),
-        ),
-        const Positioned(left: 20, top: 18, child: _Brand()),
-        const Positioned(right: 20, top: 24, child: _DemoBadge()),
-        const Positioned(
-          left: 20,
-          right: 20,
-          top: 73,
-          child: Divider(
-            height: 1,
-            thickness: 1,
-            color: AppColors.borderSubtle,
-          ),
-        ),
-        Positioned(
-          left: 20,
-          top: 91,
-          child: SizedBox(
-            width: 350,
-            height: 72,
-            child: Text.rich(
-              const TextSpan(
-                children: <InlineSpan>[
-                  TextSpan(text: '创建你的\n'),
-                  TextSpan(
-                    text: '数字人体',
-                    style: TextStyle(color: Color(0xFF00E5FF)),
-                  ),
-                ],
-              ),
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontSize: 30,
-                height: 1.12,
-                letterSpacing: -0.7,
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          left: 20,
-          top: 170,
-          child: SizedBox(
-            width: 350,
-            height: 48,
-            child: Text(
-              '上传正面、侧面和背面照片，\n体验 AI 生成与 3D 查看流程。',
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontSize: 14, height: 1.55),
-            ),
-          ),
-        ),
-        const Positioned(left: 20, top: 231, child: _DigitalHumanHero()),
-        const Positioned(left: 20, top: 641, child: _FlowSummary()),
-        Positioned(
-          left: 20,
-          top: 701,
-          child: PrimaryButton(
-            label: '开始创建',
-            onPressed: () => context.push('/photo-guide'),
-          ),
-        ),
-        const Positioned(
-          left: 20,
-          top: 789,
-          child: SizedBox(
-            width: 350,
-            child: _MicroLabel(
-              'FRONTEND DEMO  ·  MOCK AI  ·  LOCAL GLB',
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _Brand extends StatelessWidget {
-  const _Brand();
-
-  @override
-  Widget build(BuildContext context) {
-    return Semantics(
-      image: true,
-      label: 'HumanTwin AI',
-      child: ExcludeSemantics(
-        child: MediaQuery.withClampedTextScaling(
-          maxScaleFactor: 1,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Image.asset(
-                'assets/images/brand/humantwin_mark.png',
-                key: const ValueKey<String>('humantwin-brand-mark'),
-                width: 38,
-                height: 38,
-                filterQuality: FilterQuality.high,
-              ),
-              const SizedBox(width: 8),
-              const Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text.rich(
-                    TextSpan(
-                      children: <InlineSpan>[
-                        TextSpan(
-                          text: 'HumanTwin',
-                          style: TextStyle(color: AppColors.textPrimary),
-                        ),
-                        TextSpan(
-                          text: ' AI',
-                          style: TextStyle(color: Color(0xFF00E5FF)),
-                        ),
-                      ],
-                    ),
-                    style: TextStyle(
-                      fontSize: 18,
-                      height: 1.05,
-                      letterSpacing: -0.2,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    'DIGITAL HUMAN · SMARTER LIFE',
-                    style: TextStyle(
-                      color: Color(0xFF6B7280),
-                      fontFamily: 'monospace',
-                      fontSize: 7,
-                      height: 1,
-                      letterSpacing: 1.25,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MicroLabel extends StatelessWidget {
-  const _MicroLabel(this.text, {this.textAlign = TextAlign.right});
-
-  final String text;
-  final TextAlign textAlign;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      textAlign: textAlign,
-      style: const TextStyle(
-        color: AppColors.textTertiary,
-        fontFamily: 'monospace',
-        fontSize: 10,
-        height: 1.4,
-        letterSpacing: 0.4,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-  }
-}
-
-class _DemoBadge extends StatelessWidget {
-  const _DemoBadge();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 58,
-      height: 26,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: AppColors.surface1,
-        border: Border.all(color: AppColors.borderSubtle),
-        borderRadius: BorderRadius.circular(AppRadii.full),
-      ),
-      child: const Text(
-        'DEMO',
-        style: TextStyle(
-          color: Color(0xFF00E5FF),
-          fontFamily: 'monospace',
-          fontSize: 10,
-          height: 1.4,
-          letterSpacing: 0.4,
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-    );
-  }
-}
-
-class _FlowSummary extends StatelessWidget {
-  const _FlowSummary();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 350,
-      height: 40,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: AppColors.surface1.withValues(alpha: 0.82),
-        border: Border.all(color: AppColors.borderSubtle),
-        borderRadius: BorderRadius.circular(AppRadii.small),
-      ),
-      child: MediaQuery.withClampedTextScaling(
-        maxScaleFactor: 1,
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _FlowStep('三视图采集'),
-            _FlowDivider(),
-            _FlowStep('AI 生成'),
-            _FlowDivider(),
-            _FlowStep('3D 查看'),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _FlowStep extends StatelessWidget {
-  const _FlowStep(this.label);
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          width: 4,
-          height: 4,
-          decoration: const BoxDecoration(
-            color: AppColors.accentPrimary,
-            shape: BoxShape.circle,
-            boxShadow: <BoxShadow>[
-              BoxShadow(color: Color(0x6686D7FF), blurRadius: 5),
-            ],
-          ),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          label,
-          style: const TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 12,
-            height: 1.25,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _FlowDivider extends StatelessWidget {
-  const _FlowDivider();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 11),
-      child: SizedBox(
-        width: 1,
-        height: 14,
-        child: ColoredBox(color: AppColors.borderSubtle),
-      ),
-    );
-  }
-}
-
-class _DigitalHumanHero extends StatelessWidget {
-  const _DigitalHumanHero();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 350,
-      height: 390,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: <Color>[Color(0xFF131C25), Color(0xFF0B1118)],
-        ),
-        border: Border.all(color: const Color(0x665B91AB)),
-        borderRadius: BorderRadius.circular(AppRadii.large),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(
-            color: Color(0x42000000),
-            offset: Offset(0, 14),
-            blurRadius: 32,
-          ),
-          BoxShadow(color: Color(0x1886D7FF), blurRadius: 24),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        titleSpacing: AppSpacing.gutter(context),
+        title: const BrandLockup(),
+        actions: <Widget>[
+          if (demo) const DemoChipButton(),
+          const SizedBox(width: 8),
         ],
       ),
-      child: Stack(
-        children: <Widget>[
-          const Positioned(
-            left: 62,
-            right: 62,
-            top: 46,
-            bottom: 24,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  colors: <Color>[
-                    Color(0x2486D7FF),
-                    Color(0x0F2979FF),
-                    Color(0x000B1118),
-                  ],
-                  stops: <double>[0, 0.58, 1],
-                ),
-              ),
-            ),
-          ),
-          const Positioned.fill(
-            child: CustomPaint(painter: _HeroGridPainter()),
-          ),
-          Positioned(
-            key: const ValueKey<String>('digital-human-static-hero'),
-            left: 53,
-            top: 26,
-            width: 244,
-            height: 350,
-            child: Image.asset(
-              'assets/images/digital_human_hero_v2.png',
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.high,
-              semanticLabel: '数字人体静态预览',
-            ),
-          ),
-          const Positioned(
-            left: 16,
-            top: 14,
-            child: Text(
-              'DIGITAL HUMAN / STATIC PREVIEW',
-              style: TextStyle(
-                color: AppColors.accentPrimary,
-                fontFamily: 'monospace',
-                fontSize: 10,
-                height: 1.4,
-                letterSpacing: 0.4,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          const Positioned(
-            right: 16,
-            top: 14,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                _StatusDot(),
-                SizedBox(width: 6),
-                Text(
-                  'STATIC PROFILE',
-                  style: TextStyle(
-                    color: AppColors.textTertiary,
-                    fontFamily: 'monospace',
-                    fontSize: 9,
-                    height: 1.4,
-                    letterSpacing: 0.4,
-                    fontWeight: FontWeight.w500,
-                  ),
+      body: fresh
+          ? _FirstHome(demo: demo)
+          : _ReturningHome(library: library, draft: draft, demo: demo),
+    );
+  }
+}
+
+class _FirstHome extends ConsumerWidget {
+  const _FirstHome({required this.demo});
+
+  final bool demo;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme text = Theme.of(context).textTheme;
+    final double heroHeight = (MediaQuery.sizeOf(context).height * 0.34).clamp(
+      200,
+      280,
+    );
+    return PageBody(
+      children: <Widget>[
+        const SizedBox(height: 8),
+        Semantics(
+          header: true,
+          child: Text.rich(
+            const TextSpan(
+              text: '创建你的\n',
+              children: <InlineSpan>[
+                TextSpan(
+                  text: '3D 形象',
+                  style: TextStyle(color: AppColors.brandCyan),
                 ),
               ],
             ),
+            style: text.displaySmall,
           ),
-          Positioned(
-            left: 24,
-            right: 24,
-            top: 188,
-            height: 34,
-            child: const DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: <Color>[
-                    Color(0x0086D7FF),
-                    Color(0x2686D7FF),
-                    Color(0x0086D7FF),
-                  ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          demo
+              ? '准备 3 张全身照片，体验从拍摄到 3D 查看的完整流程。'
+              : '准备 3 张全身照片，生成一个可以旋转查看的 3D 形象。',
+          style: text.bodyLarge?.copyWith(color: AppColors.textSecondary),
+        ),
+        const SizedBox(height: 20),
+        HeroIllustration(height: heroHeight, demo: demo),
+        const SizedBox(height: 20),
+        PrimaryButton(
+          label: '开始创建',
+          icon: Icons.add_rounded,
+          hero: true,
+          onPressed: () => startCreation(context, ref),
+        ),
+        const SizedBox(height: 8),
+        TonalButton(
+          label: '先看看示例形象',
+          icon: Icons.view_in_ar_rounded,
+          onPressed: () => context.push('/sample'),
+        ),
+        const SectionHeader(title: '三步完成'),
+        HtListGroup(
+          children: <Widget>[
+            const HtListItem(
+              icon: Icons.photo_camera_outlined,
+              title: '拍摄或选择 3 张全身照',
+              subtitle: '正面、侧面、背面',
+            ),
+            HtListItem(
+              icon: Icons.hourglass_empty_rounded,
+              title: demo ? '等待模拟生成' : '等待生成',
+              subtitle: demo ? '约 5 秒，不会上传照片' : '耗时取决于生成服务，可离开页面',
+            ),
+            const HtListItem(
+              icon: Icons.view_in_ar_rounded,
+              title: '查看、保存与分享',
+              subtitle: '形象保存在这台手机上',
+            ),
+          ],
+        ),
+        if (demo) ...<Widget>[
+          const SizedBox(height: 16),
+          const DemoQualifierBanner(),
+        ],
+        const SizedBox(height: 16),
+        _PrivacyRow(demo: demo),
+      ],
+    );
+  }
+}
+
+class _ReturningHome extends ConsumerWidget {
+  const _ReturningHome({
+    required this.library,
+    required this.draft,
+    required this.demo,
+  });
+
+  final LibraryState library;
+  final PhotoFlowState draft;
+  final bool demo;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<GenerationRecord> attention = library.attention;
+    final List<GenerationRecord> active = library.active;
+    final List<GenerationRecord> finished = library.justFinished;
+    final List<GenerationRecord> avatars = library.avatars;
+    final DateTime now = ref.read(clockProvider)();
+    return PageBody(
+      children: <Widget>[
+        const SizedBox(height: 8),
+        draft.isEmpty ? const _CreateCard() : _DraftCard(draft: draft),
+        if (attention.isNotEmpty) ...<Widget>[
+          SectionHeader(
+            title: '需要你处理',
+            trailing: HtChip(
+              label: '${attention.length}',
+              tone: ChipTone.warning,
+            ),
+          ),
+          for (final GenerationRecord record in attention)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: TaskCard(
+                record: record,
+                onTap: () => context.push('/tasks/${record.id}'),
+              ),
+            ),
+        ],
+        if (active.isNotEmpty) ...<Widget>[
+          const SectionHeader(title: '进行中'),
+          for (final GenerationRecord record in active)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: TaskCard(
+                record: record,
+                onTap: () => context.push('/tasks/${record.id}'),
+              ),
+            ),
+        ],
+        if (finished.isNotEmpty) ...<Widget>[
+          const SizedBox(height: 16),
+          HtBanner(
+            tone: BannerTone.success,
+            title: '形象已保存',
+            body: '「${finished.first.name}」已保存到我的形象。',
+            actions: <Widget>[
+              LinkButton(
+                label: '查看',
+                onPressed: () => context.push('/avatars/${finished.first.id}'),
+              ),
+            ],
+          ),
+        ],
+        SectionHeader(
+          title: '我的形象',
+          trailing: avatars.isEmpty
+              ? null
+              : TextButton(
+                  onPressed: () => context.go('/library'),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text('全部 ${avatars.length}'),
+                      const Icon(Icons.chevron_right_rounded, size: 18),
+                    ],
+                  ),
                 ),
+        ),
+        if (avatars.isEmpty)
+          HtCard(
+            child: Text(
+              '完成的形象会显示在这里。',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          )
+        else
+          SizedBox(
+            height: _RecentAvatar.heightFor(context, avatars.take(6), now),
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              clipBehavior: Clip.none,
+              itemCount: avatars.length.clamp(0, 6),
+              separatorBuilder: (_, _) => const SizedBox(width: 12),
+              itemBuilder: (BuildContext context, int i) => _RecentAvatar(
+                record: avatars[i],
+                missing: library.missingFiles.contains(avatars[i].id),
+                now: now,
               ),
             ),
           ),
-          Positioned(
-            left: 24,
-            right: 24,
-            top: 204,
-            child: Container(
-              height: 1,
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: <Color>[
-                    Color(0x0086D7FF),
-                    Color(0xCC86D7FF),
-                    Color(0x0086D7FF),
+        if (demo) ...<Widget>[
+          const SizedBox(height: 20),
+          const DemoQualifierBanner(),
+        ],
+        const SizedBox(height: 12),
+        _PrivacyRow(demo: demo),
+      ],
+    );
+  }
+}
+
+class _CreateCard extends ConsumerWidget {
+  const _CreateCard();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme text = Theme.of(context).textTheme;
+    return HtCard(
+      gradientBorder: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Semantics(
+                      header: true,
+                      child: Text('创建新的 3D 形象', style: text.titleMedium),
+                    ),
+                    const SizedBox(height: 4),
+                    Text('准备正面、侧面、背面 3 张全身照', style: text.bodyMedium),
                   ],
                 ),
-                boxShadow: <BoxShadow>[
-                  BoxShadow(color: Color(0x4786D7FF), blurRadius: 8),
-                ],
               ),
+              if (!isLargeText(context)) ...<Widget>[
+                const SizedBox(width: 16),
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: AppColors.tint(AppColors.accentPrimary, 0.12),
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: const Icon(
+                    Icons.photo_camera_outlined,
+                    size: 28,
+                    color: AppColors.accentPrimary,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          const SizedBox(height: 16),
+          PrimaryButton(
+            label: '开始创建',
+            icon: Icons.add_rounded,
+            onPressed: () => startCreation(context, ref),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DraftCard extends ConsumerWidget {
+  const _DraftCard({required this.draft});
+
+  final PhotoFlowState draft;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final TextTheme text = Theme.of(context).textTheme;
+    return HtCard(
+      gradientBorder: true,
+      semanticLabel: '未完成的创建',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      '草稿',
+                      style: text.labelSmall?.copyWith(
+                        color: AppColors.brandCyan,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text('继续创建形象', style: text.titleMedium),
+                    const SizedBox(height: 2),
+                    Text(
+                      '已选 ${draft.count}/3 张照片${draft.errorAngle != null ? '，1 张需要更换' : ''}',
+                      style: text.bodyMedium,
+                    ),
+                  ],
+                ),
+              ),
+              if (!isLargeText(context))
+                Row(
+                  children: <Widget>[
+                    for (final PhotoAngle angle in PhotoAngle.values)
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: _MiniPhoto(photo: draft.photoFor(angle)),
+                      ),
+                  ],
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ButtonPair(
+            first: SecondaryButton(
+              label: '放弃草稿',
+              onPressed: () async {
+                final bool discard = await showHtConfirm(
+                  context,
+                  title: '放弃这个草稿？',
+                  paragraphs: const <String>[
+                    '已选的照片会从 HumanTwin 中移除。从相册选择的原图不受影响；用相机拍摄的照片只保存在本应用中，放弃后无法找回。',
+                  ],
+                  confirmLabel: '放弃草稿',
+                  destructive: true,
+                );
+                if (discard && context.mounted) {
+                  await ref.read(photoFlowControllerProvider.notifier).reset();
+                  if (context.mounted) {
+                    showHtSnack(context, '已放弃草稿');
+                  }
+                }
+              },
+            ),
+            second: PrimaryButton(
+              label: '继续',
+              onPressed: () => context.push('/create/photos'),
             ),
           ),
         ],
@@ -498,110 +382,156 @@ class _DigitalHumanHero extends StatelessWidget {
   }
 }
 
-class _StatusDot extends StatelessWidget {
-  const _StatusDot();
+class _MiniPhoto extends StatelessWidget {
+  const _MiniPhoto({required this.photo});
+
+  final XFile? photo;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 5,
-      height: 5,
-      decoration: const BoxDecoration(
-        color: AppColors.accentPrimary,
-        shape: BoxShape.circle,
-        boxShadow: <BoxShadow>[
-          BoxShadow(color: Color(0x9986D7FF), blurRadius: 6),
-        ],
+    final XFile? photo = this.photo;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(6),
+      child: Container(
+        width: 36,
+        height: 45,
+        decoration: BoxDecoration(
+          color: AppColors.surface2,
+          border: Border.all(
+            color: photo == null
+                ? AppColors.borderStrong
+                : AppColors.borderSubtle,
+          ),
+          borderRadius: BorderRadius.circular(6),
+        ),
+        child: photo == null
+            ? const Icon(
+                Icons.add_rounded,
+                size: 16,
+                color: AppColors.textTertiary,
+              )
+            : ExcludeSemantics(
+                child: Image.file(File(photo.path), fit: BoxFit.cover),
+              ),
       ),
     );
   }
 }
 
-class _SpatialGridPainter extends CustomPainter {
-  const _SpatialGridPainter();
+class _RecentAvatar extends StatelessWidget {
+  const _RecentAvatar({
+    required this.record,
+    required this.missing,
+    required this.now,
+  });
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = AppColors.borderSubtle.withValues(alpha: 0.14)
-      ..strokeWidth = 1;
-    for (double x = 65; x < size.width; x += 65) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+  final GenerationRecord record;
+  final bool missing;
+  final DateTime now;
+
+  static double widthFor(BuildContext context) =>
+      isLargeText(context) ? 176 : 128;
+
+  /// The strip's height: a horizontal list cannot grow with its items, so lay out each
+  /// item's name (at most two lines) and date at the current width and text size.
+  static double heightFor(
+    BuildContext context,
+    Iterable<GenerationRecord> records,
+    DateTime now,
+  ) {
+    final TextTheme text = Theme.of(context).textTheme;
+    final double width = widthFor(context);
+    double measure(String value, TextStyle? style, {int? maxLines}) {
+      final TextPainter painter = TextPainter(
+        text: TextSpan(text: value, style: style),
+        textDirection: Directionality.of(context),
+        textScaler: MediaQuery.textScalerOf(context),
+        maxLines: maxLines,
+        ellipsis: maxLines == null ? null : '…',
+      )..layout(maxWidth: width);
+      final double height = painter.height;
+      painter.dispose();
+      return height;
     }
-    for (double y = 84; y < size.height; y += 84) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+
+    double tallest = 0;
+    for (final GenerationRecord record in records) {
+      final double item =
+          measure(record.name, text.labelMedium, maxLines: 2) +
+          measure(formatRecordTime(record.createdAt, now), text.bodySmall);
+      tallest = item > tallest ? item : tallest;
     }
+    return width * 5 / 4 + 8 + tallest + 2;
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  Widget build(BuildContext context) {
+    final TextTheme text = Theme.of(context).textTheme;
+    return SizedBox(
+      width: widthFor(context),
+      child: Semantics(
+        button: true,
+        label:
+            '${record.name}，${record.isSimulated ? '示例模型' : 'AI 生成'}${missing ? '，本机文件缺失' : ''}',
+        excludeSemantics: true,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(AppRadii.medium),
+          onTap: () => context.push('/avatars/${record.id}'),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              AvatarThumbnail(
+                record: record,
+                top: <Widget>[
+                  if (!record.resultSeen)
+                    const HtChip(
+                      label: '新',
+                      tone: ChipTone.info,
+                      onMedia: true,
+                    ),
+                  if (missing)
+                    const HtChip(
+                      label: '文件缺失',
+                      tone: ChipTone.warning,
+                      icon: Icons.image_not_supported_outlined,
+                      onMedia: true,
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                record.name,
+                style: text.labelMedium?.copyWith(color: AppColors.textPrimary),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              Text(
+                formatRecordTime(record.createdAt, now),
+                style: text.bodySmall,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _HeroGridPainter extends CustomPainter {
-  const _HeroGridPainter();
+class _PrivacyRow extends StatelessWidget {
+  const _PrivacyRow({required this.demo});
+
+  final bool demo;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final Paint grid = Paint()
-      ..color = AppColors.borderSubtle.withValues(alpha: 0.38)
-      ..strokeWidth = 1;
-    for (double x = 70; x < size.width; x += 70) {
-      canvas.drawLine(Offset(x, 48), Offset(x, size.height - 48), grid);
-    }
-
-    final Paint axis = Paint()
-      ..color = AppColors.accentPrimary.withValues(alpha: 0.18)
-      ..strokeWidth = 1;
-    canvas.drawLine(
-      Offset(size.width / 2, 48),
-      Offset(size.width / 2, size.height - 28),
-      axis,
-    );
-    for (double y = 84; y < size.height - 40; y += 52) {
-      canvas.drawLine(Offset(36, y), Offset(size.width - 36, y), grid);
-    }
-
-    final Paint accent = Paint()
-      ..color = AppColors.accentPrimary.withValues(alpha: 0.55)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: Offset(size.width / 2, size.height - 35),
-        width: 220,
-        height: 38,
+  Widget build(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: HtListItem(
+        icon: Icons.verified_user_outlined,
+        title: demo ? '照片与形象仅保存在本机' : '形象保存在本机',
+        subtitle: demo ? '演示版不会上传任何照片' : '只有提交生成时，三张照片才会发给第三方服务',
+        onTap: () => context.push('/privacy'),
       ),
-      accent,
     );
-    const double edge = 22;
-    for (final (Offset start, Offset middle, Offset end)
-        in <(Offset, Offset, Offset)>[
-          (
-            const Offset(edge, 54),
-            const Offset(edge, edge),
-            const Offset(54, edge),
-          ),
-          (
-            Offset(size.width - 54, edge),
-            Offset(size.width - edge, edge),
-            Offset(size.width - edge, 54),
-          ),
-          (
-            Offset(edge, size.height - 54),
-            Offset(edge, size.height - edge),
-            Offset(54, size.height - edge),
-          ),
-          (
-            Offset(size.width - 54, size.height - edge),
-            Offset(size.width - edge, size.height - edge),
-            Offset(size.width - edge, size.height - 54),
-          ),
-        ]) {
-      canvas.drawLine(start, middle, accent);
-      canvas.drawLine(middle, end, accent);
-    }
   }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

@@ -1,0 +1,37 @@
+[
+  {
+    "file": "base.obj",
+    "bytes": 1749303,
+    "sha256": "8e761e6624b8f54536409135d1636da63b32486a90d4897f84e121d144f6fb4c",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/a8bc2d54ff0ac92e78ff71431b1023eda42bf482/makehuman/data/3dobjs/base.obj",
+    "commit": "a8bc2d54ff0ac92e78ff71431b1023eda42bf482"
+  },
+  {
+    "file": "asian-male-young.target",
+    "bytes": 421040,
+    "sha256": "ed2e8c191cb6b87b4a2d97c80486acb2604fa549316c7aa2a738a5d5a14334dc",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/a8bc2d54ff0ac92e78ff71431b1023eda42bf482/makehuman/data/targets/macrodetails/asian-male-young.target",
+    "commit": "a8bc2d54ff0ac92e78ff71431b1023eda42bf482"
+  },
+  {
+    "file": "muscle.target",
+    "bytes": 147110,
+    "sha256": "c171ff9cc95e96273beb3e3b1969a01988c2d4982ebc6fe04bf81cf72ee3b295",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/a8bc2d54ff0ac92e78ff71431b1023eda42bf482/makehuman/data/targets/macrodetails/universal-male-young-maxmuscle-averageweight.target",
+    "commit": "a8bc2d54ff0ac92e78ff71431b1023eda42bf482"
+  },
+  {
+    "file": "LICENSE.md",
+    "bytes": 3598,
+    "sha256": "edd99571ca62698f78c943fd4fffb159a413c315fa0d4819d3cec5cadaf8b4f1",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/a8bc2d54ff0ac92e78ff71431b1023eda42bf482/LICENSE.md",
+    "commit": "a8bc2d54ff0ac92e78ff71431b1023eda42bf482"
+  },
+  {
+    "file": "LICENSE.ASSETS.md",
+    "bytes": 6962,
+    "sha256": "f6089cba01cb570a24712b41ab8a586ccd3cc5ef53dc266ca50b95c288956d2c",
+    "source": "https://raw.githubusercontent.com/makehumancommunity/makehuman/a8bc2d54ff0ac92e78ff71431b1023eda42bf482/LICENSE.ASSETS.md",
+    "commit": "a8bc2d54ff0ac92e78ff71431b1023eda42bf482"
+  }
+]

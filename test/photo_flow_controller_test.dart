@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:human_twin_ai/features/capture/photo_flow_controller.dart';
+import 'package:human_twin_ai/shared/storage/local_store.dart';
 import 'package:image_picker/image_picker.dart';
 
 void main() {
@@ -280,13 +283,123 @@ void main() {
     expect(state.front, same(fresh));
     expect(state.pendingAngle, isNull);
   });
+
+  test(
+    'a photo recovered after the app was ended returns to the angle being picked',
+    () async {
+      final XFile recovered = XFile('/photos/recovered-side.jpg');
+      final FakeImagePicker picker = FakeImagePicker(
+        lostDataResponse: LostDataResponse(
+          file: recovered,
+          files: <XFile>[recovered],
+          type: RetrieveType.image,
+        ),
+      );
+      final ProviderContainer container = createContainer(
+        picker,
+        overrides: [
+          initialDraftProvider.overrideWithValue(<PhotoAngle, XFile>{
+            PhotoAngle.front: XFile('/photos/front.jpg'),
+            PhotoAngle.side: XFile('/photos/old-side.jpg'),
+            PhotoAngle.back: XFile('/photos/back.jpg'),
+          }),
+          initialPickingAngleProvider.overrideWithValue(PhotoAngle.side),
+        ],
+      );
+
+      await container
+          .read(photoFlowControllerProvider.notifier)
+          .retrieveLostData();
+
+      final PhotoFlowState state = container.read(photoFlowControllerProvider);
+      expect(state.side, same(recovered));
+      expect(state.front!.path, '/photos/front.jpg');
+      expect(state.back!.path, '/photos/back.jpg');
+    },
+  );
+
+  group('file-backed draft', () {
+    late Directory temp;
+    late LocalStore store;
+    late FileDraftPhotoStore drafts;
+
+    setUp(() async {
+      temp = await Directory.systemTemp.createTemp('ht-draft-');
+      store = await LocalStore.open(
+        documentsPath: '${temp.path}/docs',
+        cachePath: '${temp.path}/cache',
+      );
+      drafts = FileDraftPhotoStore(
+        store,
+        strictFormats: () => false,
+        cacheRoot: '${temp.path}/cache/',
+      );
+    });
+
+    tearDown(() => temp.delete(recursive: true));
+
+    test('records the angle being picked and clears it afterwards', () async {
+      await drafts.persist(const PhotoFlowState(pendingAngle: PhotoAngle.back));
+      expect(await drafts.pickingAngle(), PhotoAngle.back);
+      await drafts.persist(const PhotoFlowState());
+      expect(await drafts.pickingAngle(), isNull);
+    });
+
+    test('a rejected pick left in the picker cache is deleted too', () async {
+      final File notAPhoto = File('${temp.path}/cache/pick.jpg')
+        ..createSync(recursive: true)
+        ..writeAsStringSync('not an image');
+      await expectLater(
+        drafts.adopt(PhotoAngle.front, XFile(notAPhoto.path)),
+        throwsA(isA<PhotoRejected>()),
+      );
+      expect(notAPhoto.existsSync(), isFalse);
+    });
+
+    test('undo only restores a photo whose file still exists', () async {
+      final File photo = File('${temp.path}/front.jpg')
+        ..writeAsBytesSync(<int>[0xFF, 0xD8, 0xFF, 0xE0, 0, 0]);
+      final ProviderContainer container = createContainer(
+        FakeImagePicker(),
+        overrides: [draftPhotoStoreProvider.overrideWithValue(drafts)],
+      );
+      final PhotoFlowController controller = container.read(
+        photoFlowControllerProvider.notifier,
+      );
+      final XFile adopted = await drafts.adopt(
+        PhotoAngle.front,
+        XFile(photo.path),
+      );
+      File(adopted.path).deleteSync();
+      expect(controller.restorePhoto(PhotoAngle.front, adopted), isFalse);
+      expect(container.read(photoFlowControllerProvider).front, isNull);
+    });
+
+    test('files the manifest does not reference are swept', () async {
+      final XFile kept = await drafts.restore(
+        PhotoAngle.front,
+        (File('${temp.path}/a.jpg')..writeAsBytesSync(<int>[1])).path,
+      );
+      final File stray = File('${store.draftDir.path}/side-1.jpg')
+        ..writeAsBytesSync(<int>[2]);
+      await drafts.persist(PhotoFlowState(front: kept));
+      expect(await drafts.manifestIntact(), isTrue);
+      await drafts.sweep();
+      expect(File(kept.path).existsSync(), isTrue);
+      expect(stray.existsSync(), isFalse);
+    });
+  });
 }
 
-ProviderContainer createContainer(FakeImagePicker picker) {
+ProviderContainer createContainer(
+  FakeImagePicker picker, {
+  List<Override> overrides = const <Override>[],
+}) {
   final ProviderContainer container = ProviderContainer(
     overrides: [
       imagePickerProvider.overrideWithValue(picker),
       lostDataRecoverySupportedProvider.overrideWithValue(true),
+      ...overrides,
     ],
   );
   addTearDown(container.dispose);

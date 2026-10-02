@@ -1,0 +1,24 @@
+{
+  "sourceSceneReopened": true,
+  "sourceEditableObjects": 7,
+  "glbImported": true,
+  "importedMeshes": 1,
+  "vertices": 44748,
+  "boundsMinimumMeters": [
+    -0.5822360515594482,
+    -0.3760037422180176,
+    0.0003696612548083067
+  ],
+  "boundsMaximumMeters": [
+    0.5822360515594482,
+    0.13843193650245667,
+    1.8009974956512451
+  ],
+  "dimensionsMeters": [
+    1.1644721031188965,
+    0.5144356787204742,
+    1.8006278343964368
+  ],
+  "finiteGeometry": true,
+  "glbRendered": true
+}

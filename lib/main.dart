@@ -1,19 +1,118 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:image_picker/image_picker.dart';
+
 import 'app/app.dart';
+import 'features/capture/photo_flow_controller.dart';
+import 'features/generation/digital_twin_repository.dart';
+import 'features/library/generation_record.dart';
+import 'features/library/library_controller.dart';
+import 'features/settings/app_settings.dart';
+import 'shared/platform/device_services.dart';
+import 'shared/storage/local_store.dart';
 import 'features/viewer/digital_twin_viewer.dart';
 
 export 'features/viewer/digital_twin_viewer.dart'
     show DigitalTwinViewerPage, ModelViewerBuilder, buildHumanModelViewer;
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky));
-  runApp(ProviderScope(child: HumanTwinApp()));
+  // Edge-to-edge with visible system bars (status bar shows time/battery); SafeArea handles insets.
+  unawaited(SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge));
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarContrastEnforced: false,
+    ),
+  );
+
+  final DeviceServices device = MethodChannelDeviceServices();
+  DevicePaths paths;
+  try {
+    paths = await device.paths();
+  } on Object catch (error) {
+    // Without the platform channel (e.g. a host test) keep the app usable with throwaway storage.
+    debugPrint('Device paths unavailable, using temporary storage: $error');
+    final Directory temp = await Directory.systemTemp.createTemp('humantwin-');
+    paths = DevicePaths(documents: temp.path, cache: temp.path, sdkInt: 0);
+  }
+  final LocalStore store = await LocalStore.open(
+    documentsPath: paths.documents,
+    cachePath: paths.cache,
+  );
+  final FileDraftPhotoStore drafts = FileDraftPhotoStore(
+    store,
+    // Upload builds enforce the service's JPEG/PNG ≤ 8 MB rule; Mock accepts common photos.
+    strictFormats: () => humanTwinApiBaseUrl.isNotEmpty,
+    cacheRoot: paths.pickerCache,
+  );
+  // Each piece of saved state loads independently: one unreadable file never blocks launch.
+  final AppSettings settings = await _loadOr(
+    'settings',
+    () => AppSettings.load(store),
+    const AppSettings(),
+  );
+  final List<GenerationRecord> records = await _loadOr(
+    'records',
+    () => LibraryController.loadRecords(store),
+    const <GenerationRecord>[],
+  );
+  await _loadOr<void>('record cleanup', () async {
+    if (await LibraryController.indexIntact(store)) {
+      await LibraryController.sweepOrphans(store, records);
+    } else {
+      await LibraryController.preserveDamagedIndex(store);
+    }
+  }, null);
+  await _loadOr<void>('draft cleanup', () async {
+    if (await drafts.manifestIntact()) {
+      await drafts.sweep();
+    }
+  }, null);
+  final Map<PhotoAngle, XFile> draft = await _loadOr(
+    'draft',
+    drafts.load,
+    const <PhotoAngle, XFile>{},
+  );
+  final PhotoAngle? pickingAngle = await _loadOr(
+    'picking angle',
+    drafts.pickingAngle,
+    null,
+  );
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        deviceServicesProvider.overrideWithValue(device),
+        deviceSdkIntProvider.overrideWithValue(paths.sdkInt),
+        localStoreProvider.overrideWithValue(store),
+        initialSettingsProvider.overrideWithValue(settings),
+        draftPhotoStoreProvider.overrideWithValue(drafts),
+        initialDraftProvider.overrideWithValue(draft),
+        initialPickingAngleProvider.overrideWithValue(pickingAngle),
+        initialRecordsProvider.overrideWithValue(records),
+      ],
+      child: HumanTwinApp(),
+    ),
+  );
+}
+
+Future<T> _loadOr<T>(String what, Future<T> Function() load, T fallback) async {
+  try {
+    return await load();
+  } on Object catch (error) {
+    debugPrint('Could not load $what: $error');
+    return fallback;
+  }
 }
 
 class HumanTwinPocApp extends StatelessWidget {

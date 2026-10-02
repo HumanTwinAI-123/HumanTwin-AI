@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Local generation proxy task metadata and Python caches
+/server/.data/
+__pycache__/

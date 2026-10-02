@@ -1,0 +1,11 @@
+{
+  "bytes": 6396864,
+  "sha256": "e6c0c3fa7068e2aefa29846d16b48aaba2d7de5a0f58ce81da1e338dd4464b7c",
+  "triangles": 82979,
+  "meshCount": 1,
+  "materialCount": 7,
+  "embeddedImages": 8,
+  "selfContained": true,
+  "source": "MakeHuman official CC0 core assets + Blender remodeling",
+  "usesUserPhotos": false
+}

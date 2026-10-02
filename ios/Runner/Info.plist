@@ -5,9 +5,9 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>需要使用相机拍摄正面、侧面和背面照片，用于生成数字人体演示。</string>
+	<string>需要使用相机拍摄正面、侧面和背面照片，用于创建 3D 形象（演示版结果为示例模型）。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>需要访问照片图库以选择正面、侧面和背面照片，用于生成数字人体演示。</string>
+	<string>需要访问照片图库以选择正面、侧面和背面照片，用于创建 3D 形象（演示版结果为示例模型）。</string>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>

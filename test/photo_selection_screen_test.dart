@@ -1,371 +1,215 @@
-import 'dart:collection';
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
-import 'package:human_twin_ai/app/app.dart';
 import 'package:human_twin_ai/features/capture/photo_flow_controller.dart';
-import 'package:human_twin_ai/shared/widgets/photo_slot.dart';
-import 'package:human_twin_ai/shared/widgets/primary_button.dart';
+import 'package:human_twin_ai/features/capture/photo_selection_screen.dart';
+import 'package:human_twin_ai/features/capture/review_screen.dart';
+import 'package:human_twin_ai/features/generation/task_screen.dart';
+import 'package:human_twin_ai/features/library/avatar_detail_screen.dart';
+import 'package:human_twin_ai/features/library/generation_record.dart';
+import 'package:human_twin_ai/features/settings/app_settings.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'support/harness.dart';
 
 void main() {
   testWidgets(
-    'three real slot states enable CTA, survive back, replace, cancel, and remove',
+    'Creating a simulated avatar: guide, photos, review, progress, result',
     (WidgetTester tester) async {
-      _configureView(tester, const Size(390, 844));
-      final XFile front = _testImage('front.png');
-      final XFile side = _testImage('side.png');
-      final XFile back = _testImage('back.png');
-      final XFile replacement = _testImage('front-replacement.png');
-      final FakeImagePicker picker = FakeImagePicker(
-        pickResults: <Object?>[
-          front,
-          side,
-          back,
-          null,
-          replacement,
-          StateError('replace failed'),
-        ],
-      );
-      final _TestApp testApp = await _pumpTestApp(tester, picker);
+      configureView(tester, const Size(390, 844));
+      final TestApp app = await pumpApp(tester);
 
-      expect(
-        picker.retrieveLostDataCallCount,
-        1,
-        reason: 'the app root must check lost data on cold startup',
-      );
-
-      await _openSelection(tester);
-
-      expect(picker.retrieveLostDataCallCount, 2);
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
-      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
-      await tester.pumpAndSettle();
-      expect(
-        picker.retrieveLostDataCallCount,
-        3,
-        reason: 'resuming Photo Selection must recheck Android lost data',
-      );
-
-      expect(find.byType(PhotoSlot), findsNWidgets(3));
-      for (final PhotoAngle angle in PhotoAngle.values) {
-        final PhotoSlot slot = tester.widget<PhotoSlot>(
-          find.byKey(ValueKey<String>('photo-slot-${angle.name}')),
-        );
-        expect(slot.state, PhotoSlotState.empty);
-        expect(slot.image, isNull);
-      }
-      expect(
-        tester
-            .widget<PrimaryButton>(
-              find.byKey(const ValueKey<String>('photo-selection-cta')),
-            )
-            .onPressed,
-        isNull,
-      );
-
-      await _pickFrom(tester, PhotoAngle.front, action: 'gallery');
-      PhotoFlowState state = testApp.container.read(
-        photoFlowControllerProvider,
-      );
-      expect(state.front, same(front));
-      expect(state.side, isNull);
-      expect(state.back, isNull);
-
-      await _pickFrom(tester, PhotoAngle.side, action: 'camera');
-      await _pickFrom(tester, PhotoAngle.back, action: 'gallery');
-
-      state = testApp.container.read(photoFlowControllerProvider);
-      expect(state.front, same(front));
-      expect(state.side, same(side));
-      expect(state.back, same(back));
-      expect(state.isComplete, isTrue);
-      expect(
-        tester
-            .widget<PrimaryButton>(
-              find.byKey(const ValueKey<String>('photo-selection-cta')),
-            )
-            .onPressed,
-        isNotNull,
-      );
-
-      await tester.tap(
-        find.byKey(const ValueKey<String>('photo-selection-back')),
-      );
-      await tester.pumpAndSettle();
+      await tester.tap(find.text('开始创建'));
+      await settleFrames(tester);
       expect(find.text('拍摄说明'), findsOneWidget);
-      await tester.tap(find.text('我已了解'));
-      await tester.pumpAndSettle();
-      expect(find.text('选择三视图照片'), findsOneWidget);
-      expect(
-        testApp.container.read(photoFlowControllerProvider).isComplete,
-        isTrue,
-        reason: 'returning through Photo Guide must preserve all three photos',
-      );
+      expect(find.textContaining('未满 14 周岁'), findsOneWidget);
+      await tester.tap(find.text('开始选择照片'));
+      await settleFrames(tester);
+
+      expect(find.byType(PhotoSelectionScreen), findsOneWidget);
+      expect(find.text('已添加 0/3 · 还差：正面、侧面、背面'), findsOneWidget);
+      await _addPhoto(tester, '正面');
+      expect(find.text('已添加 1/3 · 还差：侧面、背面'), findsOneWidget);
+      await _addPhoto(tester, '侧面');
+      await _addPhoto(tester, '背面');
+      expect(find.text('三张照片已就绪'), findsOneWidget);
+      expect(app.picker.picks, 3);
 
       await tester.tap(find.text('下一步'));
-      await tester.pumpAndSettle();
-      expect(
-        find.byKey(const ValueKey<String>('photo-confirmation-card-front')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const ValueKey<String>('photo-confirmation-card-side')),
-        findsOneWidget,
-      );
-      expect(
-        find.byKey(const ValueKey<String>('photo-confirmation-card-back')),
-        findsOneWidget,
-      );
-      expect(find.text('确认三视图照片'), findsOneWidget);
-      expect(find.text('DAY 5 · PLACEHOLDER'), findsNothing);
+      await settleFrames(tester);
+      expect(find.byType(ReviewScreen), findsOneWidget);
+      expect(find.text('示例形象 9月30日'), findsOneWidget);
+      expect(find.text('模拟生成约 5 秒，不会上传照片，也不消耗额度。'), findsOneWidget);
 
-      await tester.tap(
-        find.byKey(const ValueKey<String>('photo-confirmation-back')),
-      );
-      await tester.pumpAndSettle();
-      expect(
-        testApp.container.read(photoFlowControllerProvider).isComplete,
-        isTrue,
-      );
+      await tester.tap(find.text('开始模拟生成'));
+      await settleFrames(tester, frames: 3);
+      expect(find.byType(TaskScreen), findsOneWidget);
+      expect(app.photos.isEmpty, isTrue, reason: 'the draft was handed off');
+      expect(app.library.records.single.status, isNot(RecordStatus.done));
 
-      await _openSlotSheet(tester, PhotoAngle.front);
-      await tester.tap(
-        find.byKey(const ValueKey<String>('photo-action-cancel')),
-      );
-      await tester.pumpAndSettle();
-      expect(
-        testApp.container.read(photoFlowControllerProvider).front,
-        same(front),
-      );
+      await tester.pump(const Duration(seconds: 3));
+      await settleFrames(tester);
+      final GenerationRecord done = app.library.records.single;
+      expect(done.status, RecordStatus.done);
+      expect(done.isSimulated, isTrue);
+      expect(app.repository.createCount, 1);
+      expect(app.store.savedRecords, hasLength(1));
 
-      await _pickFrom(tester, PhotoAngle.front, action: 'gallery');
-      expect(
-        testApp.container.read(photoFlowControllerProvider).front,
-        same(front),
-        reason: 'system picker cancel must preserve the previous photo',
-      );
-
-      await _pickFrom(tester, PhotoAngle.front, action: 'gallery');
-      state = testApp.container.read(photoFlowControllerProvider);
-      expect(state.front, same(replacement));
-      expect(state.side, same(side));
-      expect(state.back, same(back));
-
-      await _pickFrom(tester, PhotoAngle.front, action: 'gallery');
-      state = testApp.container.read(photoFlowControllerProvider);
-      expect(state.front, same(replacement));
-      expect(state.errorFor(PhotoAngle.front), isNotNull);
-      expect(
-        tester
-            .widget<PhotoSlot>(
-              find.byKey(const ValueKey<String>('photo-slot-front')),
-            )
-            .state,
-        PhotoSlotState.filled,
-        reason: 'a failed replace keeps the still-valid previous photo',
-      );
-      expect(
-        tester
-            .widget<PrimaryButton>(
-              find.byKey(const ValueKey<String>('photo-selection-cta')),
-            )
-            .onPressed,
-        isNotNull,
-      );
-
-      await _openSlotSheet(tester, PhotoAngle.side);
-      await tester.tap(
-        find.byKey(const ValueKey<String>('photo-action-remove')),
-      );
-      await tester.pumpAndSettle();
-
-      state = testApp.container.read(photoFlowControllerProvider);
-      expect(state.front, same(replacement));
-      expect(state.side, isNull);
-      expect(state.back, same(back));
-      expect(state.isComplete, isFalse);
-      expect(
-        tester
-            .widget<PrimaryButton>(
-              find.byKey(const ValueKey<String>('photo-selection-cta')),
-            )
-            .onPressed,
-        isNull,
-      );
-      expect(picker.sources, <ImageSource>[
-        ImageSource.gallery,
-        ImageSource.camera,
-        ImageSource.gallery,
-        ImageSource.gallery,
-        ImageSource.gallery,
-        ImageSource.gallery,
-      ]);
-      expect(picker.retrieveLostDataCallCount, 4);
+      await tester.tap(find.text('查看形象'));
+      await settleFrames(tester);
+      expect(find.byType(AvatarDetailScreen), findsOneWidget);
+      expect(find.text('这是示例模型'), findsOneWidget);
     },
   );
 
-  testWidgets('Photo Selection remains scrollable at 360dp and 200% text', (
+  testWidgets('Deleting a photo offers undo, and leaving keeps the draft', (
     WidgetTester tester,
   ) async {
-    _configureView(tester, const Size(360, 650), textScaleFactor: 2);
-    final FakeImagePicker picker = FakeImagePicker();
-    await _pumpTestApp(tester, picker);
+    configureView(tester, const Size(390, 844));
+    final TestApp app = await pumpApp(tester, showGuide: false);
 
-    await _openSelection(tester);
+    await tester.tap(find.text('开始创建'));
+    await settleFrames(tester);
+    expect(find.byType(PhotoSelectionScreen), findsOneWidget);
+    await _addPhoto(tester, '正面');
+    final XFile front = app.photos.front!;
 
-    expect(
-      find.byKey(const ValueKey<String>('photo-selection-scroll')),
-      findsOneWidget,
+    await tester.tap(find.text('正面'));
+    await settleFrames(tester);
+    expect(find.text('更换正面照片'), findsOneWidget);
+    await tester.tap(find.text('删除这张照片'));
+    await settleFrames(tester);
+    expect(app.photos.front, isNull);
+    expect(find.text('已删除正面照片'), findsOneWidget);
+    await tester.tap(find.text('撤销'));
+    await settleFrames(tester);
+    expect(app.photos.front!.path, front.path);
+
+    await tester.tap(find.byTooltip('返回'));
+    await settleFrames(tester);
+    expect(find.text('已保存为草稿，可在首页继续'), findsOneWidget);
+    expect(find.text('继续创建形象'), findsOneWidget);
+
+    // The draft goes straight back to photo selection.
+    await tester.tap(find.text('继续'));
+    await settleFrames(tester);
+    expect(find.byType(PhotoSelectionScreen), findsOneWidget);
+    expect(find.text('已添加 1/3 · 还差：侧面、背面'), findsOneWidget);
+  });
+
+  testWidgets('「下次不再显示拍摄说明」 skips the guide next time', (
+    WidgetTester tester,
+  ) async {
+    configureView(tester, const Size(390, 844));
+    final TestApp app = await pumpApp(tester);
+
+    await tester.tap(find.text('开始创建'));
+    await settleFrames(tester);
+    await tester.tap(find.text('下次不再显示拍摄说明'));
+    await tester.pump();
+    await tester.tap(find.text('开始选择照片'));
+    await settleFrames(tester);
+    expect(app.container.read(appSettingsProvider).showGuide, isFalse);
+    expect(find.byType(PhotoSelectionScreen), findsOneWidget);
+
+    await tester.tap(find.byTooltip('返回'));
+    await settleFrames(tester);
+    await tester.tap(find.text('开始创建'));
+    await settleFrames(tester);
+    expect(find.byType(PhotoSelectionScreen), findsOneWidget);
+    expect(find.text('拍摄说明'), findsNothing);
+  });
+
+  testWidgets('A busy generation keeps the review page from submitting', (
+    WidgetTester tester,
+  ) async {
+    configureView(tester, const Size(390, 844));
+    final TestApp app = await pumpApp(
+      tester,
+      showGuide: false,
+      records: <GenerationRecord>[
+        GenerationRecord(
+          id: 'rrun',
+          name: '进行中的形象',
+          createdAt: testNow,
+          mode: GenerationMode.mock,
+          status: RecordStatus.processing,
+          taskId: 'mock-1',
+        ),
+      ],
+      draft: _completeDraft,
+      mockDelay: const Duration(seconds: 30),
     );
-    expect(find.byType(PhotoSlot), findsNWidgets(3));
-    expect(find.text('03 / 06'), findsNothing);
-    expect(tester.takeException(), isNull);
+    expect(app.library.blocking, hasLength(1));
 
-    await tester.scrollUntilVisible(
-      find.text('稍后'),
-      180,
-      scrollable: find.descendant(
-        of: find.byKey(const ValueKey<String>('photo-selection-scroll')),
-        matching: find.byType(Scrollable),
+    await tester.tap(find.text('继续'));
+    await settleFrames(tester);
+    await tester.tap(find.text('下一步'));
+    await settleFrames(tester);
+    expect(find.text('已有 1 个生成任务未结束'), findsOneWidget);
+    final FilledButton submit = tester.widget<FilledButton>(
+      find.ancestor(
+        of: find.text('开始模拟生成'),
+        matching: find.byType(FilledButton),
       ),
     );
-    await tester.pumpAndSettle();
+    expect(submit.onPressed, isNull);
 
-    expect(find.text('稍后'), findsOneWidget);
-    expect(tester.takeException(), isNull);
-    expect(
-      tester
-          .getBottomRight(
-            find.byKey(const ValueKey<String>('photo-selection-cta')),
-          )
-          .dy,
-      lessThanOrEqualTo(650),
-    );
+    // Let the resumed simulation finish so no timers outlive the test.
+    await tester.pump(const Duration(seconds: 31));
+    await settleFrames(tester);
   });
-}
 
-void _configureView(
-  WidgetTester tester,
-  Size size, {
-  double textScaleFactor = 1,
-}) {
-  tester.view.physicalSize = size;
-  tester.view.devicePixelRatio = 1;
-  tester.platformDispatcher.textScaleFactorTestValue = textScaleFactor;
-  addTearDown(tester.view.resetPhysicalSize);
-  addTearDown(tester.view.resetDevicePixelRatio);
-  addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-}
+  for (final (Size size, double scale, String label)
+      in <(Size, double, String)>[
+        (const Size(360, 640), 2, '360 dp at 200% text'),
+        (const Size(360, 560), 1, 'a short 360×560 screen'),
+      ]) {
+    testWidgets('Creation pages fit $label', (WidgetTester tester) async {
+      configureView(tester, size, textScale: scale);
+      final TestApp app = await pumpApp(tester, draft: _completeDraft);
+      expectNoLayoutErrors(tester, 'home');
 
-Future<_TestApp> _pumpTestApp(
-  WidgetTester tester,
-  FakeImagePicker picker,
-) async {
-  final ProviderContainer container = ProviderContainer(
-    overrides: [
-      imagePickerProvider.overrideWithValue(picker),
-      lostDataRecoverySupportedProvider.overrideWithValue(true),
-    ],
-  );
-  final GoRouter router = createAppRouter();
-  addTearDown(container.dispose);
-  addTearDown(router.dispose);
+      await tester.tap(find.text('继续'));
+      await settleFrames(tester);
+      expectNoLayoutErrors(tester, 'photos');
+      expect(find.text('下一步'), findsOneWidget);
+      if (scale > 1.5) {
+        // Large text switches the three slots to a single-column list.
+        expect(find.text('点按更换'), findsNWidgets(3));
+      }
 
-  await tester.pumpWidget(
-    UncontrolledProviderScope(
-      container: container,
-      child: HumanTwinApp(router: router),
-    ),
-  );
-  await tester.pumpAndSettle();
-  return _TestApp(container: container);
-}
+      await tester.tap(find.text('下一步'));
+      await settleFrames(tester);
+      expectNoLayoutErrors(tester, 'review');
+      expect(find.text('开始模拟生成'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('接下来会发生什么'),
+        200,
+        scrollable: scrollableIn(ReviewScreen),
+      );
+      await tester.pump();
+      expectNoLayoutErrors(tester, 'review scrolled');
 
-Future<void> _openSelection(WidgetTester tester) async {
-  await tester.ensureVisible(find.text('开始创建'));
-  await tester.pumpAndSettle();
-  await tester.tap(find.text('开始创建'));
-  await tester.pumpAndSettle();
-  expect(find.text('拍摄说明'), findsOneWidget);
-
-  await tester.tap(find.text('我已了解'));
-  await tester.pumpAndSettle();
-  expect(find.text('选择三视图照片'), findsOneWidget);
-}
-
-Future<void> _openSlotSheet(WidgetTester tester, PhotoAngle angle) async {
-  await tester.tap(find.byKey(ValueKey<String>('photo-slot-${angle.name}')));
-  await tester.pumpAndSettle();
-  expect(
-    find.byKey(const ValueKey<String>('photo-action-gallery')),
-    findsOneWidget,
-  );
-}
-
-Future<void> _pickFrom(
-  WidgetTester tester,
-  PhotoAngle angle, {
-  required String action,
-}) async {
-  await _openSlotSheet(tester, angle);
-  await tester.tap(find.byKey(ValueKey<String>('photo-action-$action')));
-  await tester.pumpAndSettle();
-}
-
-XFile _testImage(String path) {
-  final Uint8List bytes = base64Decode(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
-  );
-  return XFile.fromData(
-    bytes,
-    path: '/tmp/$path',
-    name: path,
-    mimeType: 'image/png',
-  );
-}
-
-class _TestApp {
-  const _TestApp({required this.container});
-
-  final ProviderContainer container;
-}
-
-class FakeImagePicker extends ImagePicker {
-  FakeImagePicker({List<Object?> pickResults = const <Object?>[]})
-    : _pickResults = Queue<Object?>.of(pickResults);
-
-  final Queue<Object?> _pickResults;
-  final List<ImageSource> sources = <ImageSource>[];
-  int retrieveLostDataCallCount = 0;
-
-  @override
-  Future<XFile?> pickImage({
-    required ImageSource source,
-    double? maxWidth,
-    double? maxHeight,
-    int? imageQuality,
-    CameraDevice preferredCameraDevice = CameraDevice.rear,
-    bool requestFullMetadata = true,
-  }) async {
-    sources.add(source);
-    if (_pickResults.isEmpty) {
-      return null;
-    }
-    final Object? result = _pickResults.removeFirst();
-    if (result == null || result is XFile) {
-      return result as XFile?;
-    }
-    throw result;
+      await tester.tap(find.text('开始模拟生成'));
+      await settleFrames(tester, frames: 3);
+      expectNoLayoutErrors(tester, 'progress');
+      await tester.pump(const Duration(seconds: 3));
+      await settleFrames(tester);
+      expectNoLayoutErrors(tester, 'result');
+      expect(app.library.records.single.isDone, isTrue);
+    });
   }
+}
 
-  @override
-  Future<LostDataResponse> retrieveLostData() async {
-    retrieveLostDataCallCount++;
-    return LostDataResponse.empty();
-  }
+final Map<PhotoAngle, XFile> _completeDraft = <PhotoAngle, XFile>{
+  PhotoAngle.front: XFile('/draft/front.jpg'),
+  PhotoAngle.side: XFile('/draft/side.jpg'),
+  PhotoAngle.back: XFile('/draft/back.jpg'),
+};
+
+Future<void> _addPhoto(WidgetTester tester, String angle) async {
+  await tester.tap(find.text(angle));
+  await settleFrames(tester);
+  await tester.tap(find.text('从相册选择'));
+  await settleFrames(tester);
 }

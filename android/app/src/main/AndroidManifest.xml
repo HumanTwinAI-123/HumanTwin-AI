@@ -28,6 +28,20 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Shares files the app exported to its cache (PNG/GLB); read-only grants per share. -->
+        <provider
+            android:name=".HumanTwinFileProvider"
+            android:authorities="${applicationId}.humantwin.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/humantwin_file_paths" />
+        </provider>
+        <!-- Receives which app the user picked in the share sheet (explicit, not exported). -->
+        <receiver
+            android:name=".ShareTargetReceiver"
+            android:exported="false" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
@@ -43,6 +57,11 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- Lets the share result name the app the user picked (label lookup on Android 11+). -->
+        <intent>
+            <action android:name="android.intent.action.SEND"/>
+            <data android:mimeType="*/*"/>
         </intent>
     </queries>
 </manifest>
